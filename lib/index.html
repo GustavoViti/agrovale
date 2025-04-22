@@ -1,68 +1,70 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR"> <!-- Define que o documento está em português do Brasil – Gustavo Viti -->
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agrovale</title>
-    <link rel="stylesheet" href="style/stile.css">
+    <meta charset="UTF-8"> <!-- Define a codificação de caracteres como UTF-8, suportando acentuação – Gustavo Viti -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Torna o site responsivo em dispositivos móveis – Gustavo Viti -->
+    <title>Agrovale</title> <!-- Define o título da aba do navegador – Gustavo Viti -->
+    <link rel="stylesheet" href="style/stile.css"> <!-- Linka uma folha de estilo externa (obs: verifique se o nome 'stile.css' está correto) – Gustavo Viti -->
 </head>
-<body onload="verificarLogin()">
-    <!-- Barra de navegação -->
+<body onload="verificarLogin()"> <!-- Quando a página carregar, executa a função verificarLogin() para checar se o usuário está autenticado – Gustavo Viti -->
+
+    <!-- Barra de navegação principal com links que mostram seções específicas da página – Gustavo Viti -->
     <div class="navbar">
-        <a href="#" onclick="mostrarSecao('home')">Início</a>
-        <a href="#" onclick="mostrarSecao('cadastroClientes')">Cadastro de Clientes</a>
-        <a href="#" onclick="mostrarSecao('consultaClientes')">Consulta de Clientes</a>
-        <a href="#" onclick="mostrarSecao('cadastroProdutos')">Cadastro de Produtos</a>
-        <a href="#" onclick="mostrarSecao('consultaProdutos')">Consulta de Produtos</a>
-        <a href="#" onclick="mostrarSecao('quemsomos')">Quem Somos</a>
+        <a href="#" onclick="mostrarSecao('home')">Início</a> <!-- Mostra a seção inicial – Gustavo Viti -->
+        <a href="#" onclick="mostrarSecao('cadastroClientes')">Cadastro de Clientes</a> <!-- Mostra a seção de cadastro de clientes – Gustavo Viti -->
+        <a href="#" onclick="mostrarSecao('consultaClientes')">Consulta de Clientes</a> <!-- Mostra a seção de consulta de clientes – Gustavo Viti -->
+        <a href="#" onclick="mostrarSecao('cadastroProdutos')">Cadastro de Produtos</a> <!-- Mostra a seção de cadastro de produtos – Gustavo Viti -->
+        <a href="#" onclick="mostrarSecao('consultaProdutos')">Consulta de Produtos</a> <!-- Mostra a seção de consulta de produtos – Gustavo Viti -->
+        <a href="#" onclick="mostrarSecao('quemsomos')">Quem Somos</a> <!-- Mostra a seção de informações institucionais – Gustavo Viti -->
     </div>
     
-    <!-- Página inicial -->
+    <!-- Seção visível ao iniciar a página com mensagem de boas-vindas – Gustavo Viti -->
     <div id="home" class="container" style="display: block;">
         <h2>Bem-vindo à Agro Vale</h2>
         <p>Selecione uma opção no menu para começar.</p>
     </div>
     
- <!-- Seção de cadastro de clientes -->
-<div id="cadastroClientes" class="container">
-    <h2>Cadastro de Clientes</h2>
-    
-    <input type="text" id="clienteId" placeholder="ID do Cliente">
-    <input type="text" id="clienteNome" placeholder="Nome do Cliente">
-    <input type="text" id="clienteTelefone" placeholder="Telefone">
-    <input type="text" id="clienteCPF" placeholder="CPF">
-    <input type="number" id="clienteLimite" placeholder="Limite de Crédito">
-    <input type="text" id="clienteEndereco" placeholder="Endereço">
-    
-    <button onclick="cadastrarCliente()">Cadastrar Cliente</button>
-    
-    <div class="list" id="listaClientes"></div>
-  </div>
-    
-    <!-- Seção de consulta de clientes -->
-    <div id="consultaClientes" class="container">
-        <h2>Consulta de Clientes</h2>
-        <div class="list" id="listaConsultaClientes"></div>
+    <!-- Seção de cadastro de clientes com inputs para inserir dados básicos – Gustavo Viti -->
+    <div id="cadastroClientes" class="container">
+        <h2>Cadastro de Clientes</h2>
+        
+        <!-- Campos de entrada de dados do cliente – Gustavo Viti -->
+        <input type="text" id="clienteId" placeholder="ID do Cliente">
+        <input type="text" id="clienteNome" placeholder="Nome do Cliente">
+        <input type="text" id="clienteTelefone" placeholder="Telefone">
+        <input type="text" id="clienteCPF" placeholder="CPF">
+        <input type="number" id="clienteLimite" placeholder="Limite de Crédito">
+        <input type="text" id="clienteEndereco" placeholder="Endereço">
+        
+        <button onclick="cadastrarCliente()">Cadastrar Cliente</button> <!-- Botão que aciona o cadastro de cliente – Gustavo Viti -->
+        
+        <div class="list" id="listaClientes"></div> <!-- Área onde será exibida a lista de clientes cadastrados – Gustavo Viti -->
     </div>
     
-    <!-- Seção de cadastro de produtos -->
+    <!-- Seção onde os clientes cadastrados serão consultados – Gustavo Viti -->
+    <div id="consultaClientes" class="container">
+        <h2>Consulta de Clientes</h2>
+        <div class="list" id="listaConsultaClientes"></div> <!-- Lista visível de clientes cadastrados – Gustavo Viti -->
+    </div>
+    
+    <!-- Seção de cadastro de produtos com campos específicos – Gustavo Viti -->
     <div id="cadastroProdutos" class="container">
         <h2>Cadastro de Produtos</h2>
         <input type="text" id="produtoNome" placeholder="Nome do Produto">
         <input type="number" id="produtoPreco" placeholder="Preço">
         <input type="text" id="produtoCodigoInterno" placeholder="Código Interno">
         <input type="text" id="produtoCodigoExterno" placeholder="Código Externo">
-        <button onclick="cadastrarProduto()">Cadastrar Produto</button>
-        <div class="list" id="listaProdutos"></div>
+        <button onclick="cadastrarProduto()">Cadastrar Produto</button> <!-- Botão para cadastrar produto – Gustavo Viti -->
+        <div class="list" id="listaProdutos"></div> <!-- Lista onde os produtos cadastrados aparecem – Gustavo Viti -->
     </div>
     
-    <!-- Seção de consulta de produtos -->
+    <!-- Seção para consultar os produtos cadastrados – Gustavo Viti -->
     <div id="consultaProdutos" class="container">
         <h2>Consulta de Produtos</h2>
-        <div class="list" id="listaConsultaProdutos"></div>
+        <div class="list" id="listaConsultaProdutos"></div> <!-- Exibição dos produtos cadastrados – Gustavo Viti -->
     </div>
     
-    <!-- Seção Quem Somos -->
+    <!-- Seção de informações sobre a empresa – Gustavo Viti -->
     <div id="quemsomos" class="container">
         <h2>Quem Somos</h2>
         <p>A Agro Vale é uma empresa dedicada ao fornecimento de insumos e produtos agropecuários, sempre prezando pela qualidade e atendimento personalizado aos nossos clientes.</p>
@@ -72,27 +74,27 @@
     <script>
         /**
          * Verifica se o usuário está logado ao carregar a página.
-         * Se não estiver logado, redireciona para a tela de login.
+         * Se não estiver logado, redireciona para a tela de login. – Gustavo Viti
          */
         function verificarLogin() {
             let usuarioLogado = sessionStorage.getItem("usuarioLogado");
             if (!usuarioLogado) {
-                window.location.href = "login.html"; // Redireciona para a tela de login
+                window.location.href = "login.html"; // Redireciona para a tela de login – Gustavo Viti
             }
         }
 
         /**
          * Mostra a seção correspondente ao clique no menu e oculta as demais.
-         * @param {string} secao - ID da seção a ser exibida.
+         * @param {string} secao - ID da seção a ser exibida. – Gustavo Viti
          */
         function mostrarSecao(secao) {
             let secoes = document.querySelectorAll('.container');
-            secoes.forEach(s => s.style.display = 'none');
-            document.getElementById(secao).style.display = 'block';
+            secoes.forEach(s => s.style.display = 'none'); // Esconde todas as seções – Gustavo Viti
+            document.getElementById(secao).style.display = 'block'; // Exibe a seção selecionada – Gustavo Viti
         }
 
         /**
-         * Cadastra um novo cliente e exibe na lista de clientes cadastrados.
+         * Cadastra um novo cliente e exibe na lista de clientes cadastrados. – Gustavo Viti
          */
         function cadastrarCliente() {
             let nome = document.getElementById('clienteNome').value;
@@ -103,13 +105,13 @@
                 let lista = document.getElementById('listaClientes');
                 let consulta = document.getElementById('listaConsultaClientes');
                 let clienteInfo = `<p><strong>${nome}</strong> - ${telefone} - ${endereco}</p>`;
-                lista.innerHTML += clienteInfo;
-                consulta.innerHTML += clienteInfo;
+                lista.innerHTML += clienteInfo; // Adiciona cliente na seção de cadastro – Gustavo Viti
+                consulta.innerHTML += clienteInfo; // Adiciona cliente na seção de consulta – Gustavo Viti
             }
         }
 
         /**
-         * Cadastra um novo produto e exibe na lista de produtos cadastrados.
+         * Cadastra um novo produto e exibe na lista de produtos cadastrados. – Gustavo Viti
          */
         function cadastrarProduto() {
             let nome = document.getElementById('produtoNome').value;
@@ -121,8 +123,8 @@
                 let lista = document.getElementById('listaProdutos');
                 let consulta = document.getElementById('listaConsultaProdutos');
                 let produtoInfo = `<p><strong>${nome}</strong> - R$${preco} - Código Interno: ${codigoInterno} - Código Externo: ${codigoExterno}</p>`;
-                lista.innerHTML += produtoInfo;
-                consulta.innerHTML += produtoInfo;
+                lista.innerHTML += produtoInfo; // Exibe produto na tela de cadastro – Gustavo Viti
+                consulta.innerHTML += produtoInfo; // Exibe produto também na seção de consulta – Gustavo Viti
             }
         }
     </script>

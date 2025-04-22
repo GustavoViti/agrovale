@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Login</title>
-  <link rel="stylesheet" href="style/auth.css">
+  <meta charset="UTF-8" /> <!-- Define o conjunto de caracteres como UTF-8, garantindo a exibição correta de acentos e caracteres especiais - Gustavo Viti -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/> <!-- Faz com que a página se adapte a diferentes tamanhos de tela (responsividade) - Gustavo Viti -->
+  <title>Login</title> <!-- Título da aba do navegador como "Login" - Gustavo Viti -->
+  <link rel="stylesheet" href="style/auth.css"> <!-- Importa o arquivo CSS externo que estiliza a página de autenticação - Gustavo Viti -->
 
   <!-- Firebase SDKs (modo compat) -->
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script> <!-- Importa o núcleo do Firebase no modo compatível (para projetos legados) - Gustavo Viti -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script> <!-- Importa o módulo de autenticação do Firebase no modo compatível - Gustavo Viti -->
 
   <script>
     // Configuração do Firebase
@@ -21,74 +21,79 @@
       appId: "1:292420787522:web:6bee092a1fcd877a257cdb",
       measurementId: "G-K4E7781SQ6"
     };
+    // Objeto contendo as credenciais e configurações do projeto Firebase - Gustavo Viti
 
     // Inicialização do Firebase
-    firebase.initializeApp(firebaseConfig);
+    firebase.initializeApp(firebaseConfig); 
+    // Conecta a aplicação ao Firebase usando as configurações fornecidas - Gustavo Viti
 
     // Login com e-mail e senha
     function loginEmailSenha(event) {
-      event.preventDefault();
+      event.preventDefault(); 
+      // Impede o recarregamento da página ao enviar o formulário - Gustavo Viti
 
       const email = document.getElementById('email').value;
       const senha = document.getElementById('senha').value;
+      // Recupera os valores digitados nos campos de e-mail e senha - Gustavo Viti
 
       firebase.auth().signInWithEmailAndPassword(email, senha)
         .then((userCredential) => {
           console.log("Login realizado:", userCredential.user);
           sessionStorage.setItem("usuarioLogado", true);
-          window.location.href = "index.html"; // Redireciona para o sistema
+          window.location.href = "index.html"; // Redireciona para a página principal após login bem-sucedido - Gustavo Viti
         })
         .catch((error) => {
           alert("Erro ao fazer login: " + error.message);
-          console.error(error);
+          console.error(error); // Exibe o erro no console para depuração - Gustavo Viti
         });
     }
 
     // Login com Google
     function loginGoogle() {
       const provider = new firebase.auth.GoogleAuthProvider();
+      // Cria um provedor de login do Google - Gustavo Viti
 
       firebase.auth().signInWithPopup(provider)
         .then((result) => {
           console.log("Login com Google:", result.user);
           sessionStorage.setItem("usuarioLogado", true);
-          window.location.href = "index.html";
+          window.location.href = "index.html"; // Redireciona após login com Google - Gustavo Viti
         })
         .catch((error) => {
           alert("Erro ao fazer login com Google: " + error.message);
-          console.error(error);
+          console.error(error); // Exibe o erro no console - Gustavo Viti
         });
     }
   </script>
 </head>
 <body>
-  <div class="wrapper">
-    <form onsubmit="loginEmailSenha(event)">
-      <h2>Login</h2>
+  <div class="wrapper"> <!-- Container principal da tela de login com estilos definidos em auth.css - Gustavo Viti -->
+    <form onsubmit="loginEmailSenha(event)"> <!-- Formulário com evento de envio vinculado à função de login por e-mail/senha - Gustavo Viti -->
+      <h2>Login</h2> <!-- Título do formulário - Gustavo Viti -->
 
       <div class="input-field">
-        <input type="text" id="email" required />
-        <label>Insira seu email</label>
+        <input type="text" id="email" required /> <!-- Campo de entrada para o e-mail (obrigatório) - Gustavo Viti -->
+        <label>Insira seu email</label> <!-- Rótulo descritivo do campo de e-mail - Gustavo Viti -->
       </div>
 
       <div class="input-field">
-        <input type="password" id="senha" required />
-        <label>Insira sua senha</label>
+        <input type="password" id="senha" required /> <!-- Campo de senha com conteúdo oculto (obrigatório) - Gustavo Viti -->
+        <label>Insira sua senha</label> <!-- Rótulo descritivo do campo de senha - Gustavo Viti -->
       </div>
 
       <div class="forget">
         <label for="remember">
-          <input type="checkbox" id="remember" />
-          <p>Lembre de mim</p>
+          <input type="checkbox" id="remember" /> <!-- Checkbox "Lembre de mim" (sem funcionalidade associada por enquanto) - Gustavo Viti -->
+          <p>Lembre de mim</p> <!-- Texto explicativo para o checkbox - Gustavo Viti -->
         </label>
-        <a href="#">Esqueceu a senha?</a>
+        <a href="#">Esqueceu a senha?</a> <!-- Link para recuperação de senha (ainda não funcional) - Gustavo Viti -->
       </div>
 
-      <button type="submit">Entrar</button>
-      <button type="button" onclick="loginGoogle()">Entrar com Google</button>
+      <button type="submit">Entrar</button> <!-- Botão que envia o formulário de login com e-mail/senha - Gustavo Viti -->
+      <button type="button" onclick="loginGoogle()">Entrar com Google</button> <!-- Botão separado que dispara o login via conta Google - Gustavo Viti -->
 
       <div class="register">
-        <p>Não tem uma conta? <a href="cadastro.html">Cadastrar</a></p>
+        <p>Não tem uma conta? <a href="cadastro.html">Cadastrar</a></p> <!-- Link para redirecionar o usuário para a tela de cadastro - Gustavo Viti -->
       </div>
     </form>
   </div>

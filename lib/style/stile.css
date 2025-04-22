@@ -1,55 +1,62 @@
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #f4f4f4;
-    text-align: center;
-    background: url("img/stihl.png"), #000;
-   
+    font-family: Arial, sans-serif; /* Define a fonte padrão da página como Arial, com fallback para fontes sans-serif - Gustavo Viti */
+    margin: 0; /* Remove a margem padrão do body - Gustavo Viti */
+    padding: 0; /* Remove o espaçamento interno padrão do body - Gustavo Viti */
+    background-color: #f4f4f4; /* Cor de fundo clara como fallback (caso a imagem falhe) - Gustavo Viti */
+    text-align: center; /* Centraliza o conteúdo textual - Gustavo Viti */
+    background: url("img/stihl.png"), #000; /* Define a imagem de fundo 'stihl.png' e uma cor de fundo preta por baixo - Gustavo Viti */
 }
+
 .navbar {
-    background-color: #f68221;
-    padding: 15px;
+    background-color: #f68221; /* Cor laranja da barra de navegação - Gustavo Viti */
+    padding: 15px; /* Espaçamento interno para dar respiro ao conteúdo da navbar - Gustavo Viti */
 }
+
 .navbar a {
-    color: white;
-    text-decoration: none;
-    margin: 15px;
-    font-size: 18px;
-    opacity: 0.6;
-    transition: 0.3s;
+    color: white; /* Cor do texto dos links na navbar - Gustavo Viti */
+    text-decoration: none; /* Remove o sublinhado padrão dos links - Gustavo Viti */
+    margin: 15px; /* Espaçamento lateral entre os links - Gustavo Viti */
+    font-size: 18px; /* Tamanho da fonte dos links - Gustavo Viti */
+    opacity: 0.6; /* Transparência inicial dos links para efeito visual - Gustavo Viti */
+    transition: 0.3s; /* Animação suave ao passar o mouse - Gustavo Viti */
 }
+
 .navbar a:hover {
-    text-decoration: underline;
-    color: #4e7573;
-    opacity: 1
+    text-decoration: underline; /* Adiciona sublinhado ao passar o mouse - Gustavo Viti */
+    color: #4e7573; /* Muda a cor do link para um tom de verde-acinzentado - Gustavo Viti */
+    opacity: 1; /* Torna o link totalmente visível no hover - Gustavo Viti */
 }
+
 .container {
-    width: 50%;
-    margin: auto;
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    display: none;
+    width: 50%; /* Define que o container ocupará metade da largura da tela - Gustavo Viti */
+    margin: auto; /* Centraliza horizontalmente o container - Gustavo Viti */
+    background: white; /* Fundo branco para destacar o conteúdo - Gustavo Viti */
+    padding: 20px; /* Espaçamento interno para o conteúdo não colar nas bordas - Gustavo Viti */
+    border-radius: 8px; /* Bordas arredondadas para suavizar o visual - Gustavo Viti */
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1); /* Sombra sutil ao redor do container - Gustavo Viti */
+    display: none; /* Oculta o container inicialmente (pode ser usado com JS para exibir) - Gustavo Viti */
 }
+
 input, button {
-    width: 100%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
+    width: 100%; /* Campos ocupam toda a largura do container - Gustavo Viti */
+    padding: 10px; /* Espaçamento interno nos campos e botões - Gustavo Viti */
+    margin: 10px 0; /* Espaçamento vertical entre os elementos - Gustavo Viti */
+    border: 1px solid #ccc; /* Borda cinza clara - Gustavo Viti */
+    border-radius: 5px; /* Bordas levemente arredondadas - Gustavo Viti */
 }
+
 button {
-    background-color: #28a745;
-    color: white;
-    border: none;
-    cursor: pointer;
+    background-color: #28a745; /* Cor de fundo verde no botão - Gustavo Viti */
+    color: white; /* Texto branco no botão - Gustavo Viti */
+    border: none; /* Remove a borda padrão - Gustavo Viti */
+    cursor: pointer; /* Cursor em formato de mão para indicar clique - Gustavo Viti */
 }
+
 button:hover {
-    background-color: #218838;
+    background-color: #218838; /* Tom mais escuro de verde no hover para indicar interatividade - Gustavo Viti */
 }
+
 .list {
-    text-align: left;
-    margin-top: 20px;
+    text-align: left; /* Alinha o texto à esquerda (útil para listas de itens) - Gustavo Viti */
+    margin-top: 20px; /* Espaçamento superior para separar de elementos acima - Gustavo Viti */
 }

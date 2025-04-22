@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Cadastro</title>
-  <link rel="stylesheet" href="style/auth.css">
+  <meta charset="UTF-8" /> <!-- Define o conjunto de caracteres como UTF-8, garantindo o suporte a acentuação e caracteres especiais - Gustavo Viti -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/> <!-- Garante que o layout se ajuste corretamente em dispositivos móveis - Gustavo Viti -->
+  <title>Cadastro</title> <!-- Define o título da aba do navegador como "Cadastro" - Gustavo Viti -->
+  <link rel="stylesheet" href="style/auth.css"> <!-- Importa o arquivo CSS externo responsável pelos estilos da página - Gustavo Viti -->
 
   <!-- Firebase SDKs (modo compat) -->
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script> <!-- Importa a biblioteca principal do Firebase (modo compatível) - Gustavo Viti -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script> <!-- Importa a biblioteca de autenticação do Firebase (modo compatível) - Gustavo Viti -->
 
   <script>
     // Configuração do Firebase
@@ -21,28 +21,33 @@
       appId: "1:292420787522:web:6bee092a1fcd877a257cdb",
       measurementId: "G-K4E7781SQ6"
     };
+    // Objeto com as credenciais do Firebase, necessário para conectar o projeto à plataforma - Gustavo Viti
 
     // Inicializa o Firebase
-    firebase.initializeApp(firebaseConfig);
+    firebase.initializeApp(firebaseConfig); 
+    // Inicializa a aplicação Firebase com as configurações fornecidas - Gustavo Viti
 
     // Função para cadastrar usuário
     function cadastrarUsuario(event) {
-      event.preventDefault();
+      event.preventDefault(); 
+      // Impede o comportamento padrão do formulário (recarregar a página) ao enviar - Gustavo Viti
 
       const email = document.getElementById("email").value;
       const senha = document.getElementById("senha").value;
       const confirmarSenha = document.getElementById("confirmarSenha").value;
+      // Captura os valores digitados nos campos de e-mail, senha e confirmação de senha - Gustavo Viti
 
       if (senha.length < 6) {
-      alert("A senha deve ter no mínimo 6 caracteres.");
-      return;
+        alert("A senha deve ter no mínimo 6 caracteres.");
+        return;
       }
-
+      // Valida o tamanho mínimo da senha antes de prosseguir - Gustavo Viti
 
       if (senha !== confirmarSenha) {
         alert("As senhas não coincidem.");
         return;
       }
+      // Verifica se a senha e a confirmação de senha são iguais - Gustavo Viti
 
       firebase.auth().createUserWithEmailAndPassword(email, senha)
         .then((userCredential) => {
@@ -55,40 +60,43 @@
           alert("Erro ao cadastrar: " + error.message);
           console.error(error);
         });
+      // Cria o usuário no Firebase Auth com email e senha.
+      // Em caso de sucesso, salva uma flag de login na sessão e redireciona para a página principal.
+      // Em caso de erro, exibe uma mensagem e mostra o erro no console - Gustavo Viti
     }
   </script>
 </head>
 <body>
-  <div class="wrapper">
-    <form onsubmit="cadastrarUsuario(event)">
-      <h2>Cadastre-se</h2>
+  <div class="wrapper"> <!-- Container principal da tela de cadastro, estilizado via CSS - Gustavo Viti -->
+    <form onsubmit="cadastrarUsuario(event)"> <!-- Formulário com evento de envio atrelado à função cadastrarUsuario() - Gustavo Viti -->
+      <h2>Cadastre-se</h2> <!-- Título da seção de cadastro - Gustavo Viti -->
 
       <div class="input-field">
-        <input type="text" id="email" required />
-        <label>Insira seu email</label>
+        <input type="text" id="email" required /> <!-- Campo de entrada para o e-mail com validação obrigatória - Gustavo Viti -->
+        <label>Insira seu email</label> <!-- Rótulo explicativo para o campo de e-mail - Gustavo Viti -->
       </div>
 
       <div class="input-field">
-        <input type="password" id="senha" required />
-        <label>Insira sua senha</label>
+        <input type="password" id="senha" required /> <!-- Campo de senha com tipo protegido e obrigatório - Gustavo Viti -->
+        <label>Insira sua senha</label> <!-- Rótulo explicativo para o campo de senha - Gustavo Viti -->
       </div>
 
       <div class="input-field">
-        <input type="password" id="confirmarSenha" required />
-        <label>Confirme sua senha</label>
+        <input type="password" id="confirmarSenha" required /> <!-- Campo para confirmar a senha digitada, obrigatório - Gustavo Viti -->
+        <label>Confirme sua senha</label> <!-- Rótulo explicativo para a confirmação de senha - Gustavo Viti -->
       </div>
 
       <div class="forget">
         <label for="remember">
-          <input type="checkbox" id="remember" />
-          <p>Lembre de mim</p>
+          <input type="checkbox" id="remember" /> <!-- Checkbox para lembrar o login (sem funcionalidade implementada) - Gustavo Viti -->
+          <p>Lembre de mim</p> <!-- Texto explicativo ao lado do checkbox - Gustavo Viti -->
         </label>
       </div>
 
-      <button type="submit">Cadastrar</button>
+      <button type="submit">Cadastrar</button> <!-- Botão que envia o formulário e executa o cadastro - Gustavo Viti -->
 
       <div class="register">
-        <p>Já tem uma conta? <a href="login.html">Entrar</a></p>
+        <p>Já tem uma conta? <a href="login.html">Entrar</a></p> <!-- Link para a página de login para usuários já cadastrados - Gustavo Viti -->
       </div>
     </form>
   </div>

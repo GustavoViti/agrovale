@@ -1,119 +1,137 @@
-@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@200;300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@200;300;400;500;600;700&display=swap"); /* Importa a fonte 'Open Sans' com várias espessuras do Google Fonts – Gustavo Viti */
+
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Open Sans", sans-serif;
+  margin: 0; /* Remove margens padrão de todos os elementos – Gustavo Viti */
+  padding: 0; /* Remove espaçamentos internos padrão – Gustavo Viti */
+  box-sizing: border-box; /* Faz com que padding e border sejam incluídos na largura total – Gustavo Viti */
+  font-family: "Open Sans", sans-serif; /* Define a fonte padrão da página – Gustavo Viti */
 }
+
 body {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  width: 100%;
-  padding: 0 10px;
+  display: flex; /* Usa Flexbox para posicionamento centralizado – Gustavo Viti */
+  align-items: center; /* Centraliza verticalmente – Gustavo Viti */
+  justify-content: center; /* Centraliza horizontalmente – Gustavo Viti */
+  min-height: 100vh; /* Garante que o corpo ocupe toda a altura da tela – Gustavo Viti */
+  width: 100%; /* Ocupa 100% da largura da viewport – Gustavo Viti */
+  padding: 0 10px; /* Adiciona um pequeno espaçamento lateral – Gustavo Viti */
 }
+
 body::before {
-  content: "";
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  background: url("img/stihl.png"), #000;
-  background-position: center;
-  background-size: cover;
+  content: ""; /* Pseudo-elemento usado para aplicar fundo – Gustavo Viti */
+  position: absolute; /* Posiciona o fundo atrás de tudo – Gustavo Viti */
+  width: 100%; /* Cobre toda a largura da tela – Gustavo Viti */
+  height: 100%; /* Cobre toda a altura da tela – Gustavo Viti */
+  background: url("img/stihl.png"), #000; /* Define imagem de fundo com fallback preto – Gustavo Viti */
+  background-position: center; /* Centraliza a imagem – Gustavo Viti */
+  background-size: cover; /* Faz a imagem cobrir todo o espaço disponível – Gustavo Viti */
 }
+
 .wrapper {
-  width: 400px;
-  border-radius: 8px;
-  padding: 30px;
-  text-align: center;
-  border: 1px solid rgba(255, 255, 255, 0.5
-  );
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  width: 400px; /* Largura fixa da caixa de formulário – Gustavo Viti */
+  border-radius: 8px; /* Arredonda os cantos – Gustavo Viti */
+  padding: 30px; /* Espaçamento interno – Gustavo Viti */
+  text-align: center; /* Centraliza o conteúdo – Gustavo Viti */
+  border: 1px solid rgba(255, 255, 255, 0.5); /* Borda translúcida – Gustavo Viti */
+  backdrop-filter: blur(8px); /* Aplica desfoque ao fundo (efeito vidro) – Gustavo Viti */
+  -webkit-backdrop-filter: blur(8px); /* Suporte ao Safari – Gustavo Viti */
 }
+
 form {
-  display: flex;
-  flex-direction: column;
+  display: flex; /* Flexbox para empilhar elementos verticalmente – Gustavo Viti */
+  flex-direction: column; /* Direção em coluna – Gustavo Viti */
 }
+
 h2 {
-  font-size: 2rem;
-  margin-bottom: 20px;
-  color: #fff;
+  font-size: 2rem; /* Tamanho grande para o título – Gustavo Viti */
+  margin-bottom: 20px; /* Espaçamento inferior – Gustavo Viti */
+  color: #fff; /* Cor branca – Gustavo Viti */
 }
+
 .input-field {
-  position: relative;
-  border-bottom: 2px solid #ccc;
-  margin: 15px 0;
+  position: relative; /* Necessário para posicionar o label dentro – Gustavo Viti */
+  border-bottom: 2px solid #ccc; /* Linha de base para destacar o campo – Gustavo Viti */
+  margin: 15px 0; /* Espaçamento entre campos – Gustavo Viti */
 }
+
 .input-field label {
-  position: absolute;
-  top: 50%;
-  left: 0;
-  transform: translateY(-50%);
-  color: #fff;
-  font-size: 16px;
-  pointer-events: none;
-  transition: 0.15s ease;
+  position: absolute; /* Posiciona sobre o input – Gustavo Viti */
+  top: 50%; /* Centraliza verticalmente – Gustavo Viti */
+  left: 0; /* Alinha à esquerda – Gustavo Viti */
+  transform: translateY(-50%); /* Ajuste fino de centralização – Gustavo Viti */
+  color: #fff; /* Cor branca – Gustavo Viti */
+  font-size: 16px; /* Tamanho padrão do label – Gustavo Viti */
+  pointer-events: none; /* Impede clique no label – Gustavo Viti */
+  transition: 0.15s ease; /* Transição suave ao animar – Gustavo Viti */
 }
+
 .input-field input {
-  width: 100%;
-  height: 40px;
-  background: transparent;
-  border: none;
-  outline: none;
-  font-size: 16px;
-  color: #fff;
+  width: 100%; /* Ocupa toda a largura – Gustavo Viti */
+  height: 40px; /* Altura padrão do campo – Gustavo Viti */
+  background: transparent; /* Fundo transparente – Gustavo Viti */
+  border: none; /* Sem borda – Gustavo Viti */
+  outline: none; /* Remove contorno ao focar – Gustavo Viti */
+  font-size: 16px; /* Tamanho da fonte – Gustavo Viti */
+  color: #fff; /* Cor do texto – Gustavo Viti */
 }
+
 .input-field input:focus~label,
 .input-field input:valid~label {
-  font-size: 0.8rem;
-  top: 10px;
-  transform: translateY(-120%);
+  font-size: 0.8rem; /* Diminui o tamanho do label – Gustavo Viti */
+  top: 10px; /* Move o label para cima – Gustavo Viti */
+  transform: translateY(-120%); /* Transição vertical para cima – Gustavo Viti */
 }
+
 .forget {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin: 25px 0 35px 0;
-  color: #fff;
+  display: flex; /* Flex para alinhar conteúdo – Gustavo Viti */
+  align-items: center; /* Alinha verticalmente – Gustavo Viti */
+  justify-content: space-between; /* Espaço entre os elementos – Gustavo Viti */
+  margin: 25px 0 35px 0; /* Espaçamento superior e inferior – Gustavo Viti */
+  color: #fff; /* Cor do texto – Gustavo Viti */
 }
+
 #remember {
-  accent-color: #fff;
+  accent-color: #fff; /* Cor do checkbox customizada – Gustavo Viti */
 }
+
 .forget label {
-  display: flex;
-  align-items: center;
+  display: flex; /* Alinha checkbox e texto – Gustavo Viti */
+  align-items: center; /* Centraliza verticalmente – Gustavo Viti */
 }
+
 .forget label p {
-  margin-left: 8px;
+  margin-left: 8px; /* Espaço entre checkbox e texto – Gustavo Viti */
 }
+
 .wrapper a {
-  color: #efefef;
-  text-decoration: none;
+  color: #efefef; /* Cor clara para links – Gustavo Viti */
+  text-decoration: none; /* Remove sublinhado padrão – Gustavo Viti */
 }
+
 .wrapper a:hover {
-  text-decoration: underline;
+  text-decoration: underline; /* Sublinha ao passar o mouse – Gustavo Viti */
 }
+
 button {
-  background: #fff;
-  color: #000;
-  font-weight: 600;
-  border: none;
-  padding: 12px 20px;
-  cursor: pointer;
-  border-radius: 3px;
-  font-size: 16px;
-  border: 2px solid transparent;
-  transition: 0.3s ease;
+  background: #fff; /* Fundo branco – Gustavo Viti */
+  color: #000; /* Texto preto – Gustavo Viti */
+  font-weight: 600; /* Texto em negrito – Gustavo Viti */
+  border: none; /* Sem borda inicial – Gustavo Viti */
+  padding: 12px 20px; /* Espaçamento interno – Gustavo Viti */
+  cursor: pointer; /* Cursor tipo mão ao passar – Gustavo Viti */
+  border-radius: 3px; /* Bordas arredondadas – Gustavo Viti */
+  font-size: 16px; /* Tamanho da fonte – Gustavo Viti */
+  border: 2px solid transparent; /* Define borda para animação posterior – Gustavo Viti */
+  transition: 0.3s ease; /* Suaviza transições – Gustavo Viti */
 }
+
 button:hover {
-  color: #fff;
-  border-color: #fff;
-  background: rgba(255, 255, 255, 0.15);
+  color: #fff; /* Texto branco ao passar o mouse – Gustavo Viti */
+  border-color: #fff; /* Aparece a borda branca – Gustavo Viti */
+  background: rgba(255, 255, 255, 0.15); /* Fundo translúcido – Gustavo Viti */
 }
+
 .register {
-  text-align: center;
-  margin-top: 30px;
-  color: #fff;
+  text-align: center; /* Centraliza texto – Gustavo Viti */
+  margin-top: 30px; /* Espaçamento superior – Gustavo Viti */
+  color: #fff; /* Cor branca para o texto – Gustavo Viti */
 }
