@@ -1,0 +1,55 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    text-align: center;
+    background: url("img/stihl.png"), #000;
+   
+}
+.navbar {
+    background-color: #f68221;
+    padding: 15px;
+}
+.navbar a {
+    color: white;
+    text-decoration: none;
+    margin: 15px;
+    font-size: 18px;
+    opacity: 0.6;
+    transition: 0.3s;
+}
+.navbar a:hover {
+    text-decoration: underline;
+    color: #4e7573;
+    opacity: 1
+}
+.container {
+    width: 50%;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    display: none;
+}
+input, button {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+button {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+button:hover {
+    background-color: #218838;
+}
+.list {
+    text-align: left;
+    margin-top: 20px;
+}

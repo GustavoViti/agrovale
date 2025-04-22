@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agrovale</title>
+    <link rel="stylesheet" href="style/stile.css">
+</head>
+<body onload="verificarLogin()">
+    <!-- Barra de navegação -->
+    <div class="navbar">
+        <a href="#" onclick="mostrarSecao('home')">Início</a>
+        <a href="#" onclick="mostrarSecao('cadastroClientes')">Cadastro de Clientes</a>
+        <a href="#" onclick="mostrarSecao('consultaClientes')">Consulta de Clientes</a>
+        <a href="#" onclick="mostrarSecao('cadastroProdutos')">Cadastro de Produtos</a>
+        <a href="#" onclick="mostrarSecao('consultaProdutos')">Consulta de Produtos</a>
+        <a href="#" onclick="mostrarSecao('quemsomos')">Quem Somos</a>
+    </div>
+    
+    <!-- Página inicial -->
+    <div id="home" class="container" style="display: block;">
+        <h2>Bem-vindo à Agro Vale</h2>
+        <p>Selecione uma opção no menu para começar.</p>
+    </div>
+    
+ <!-- Seção de cadastro de clientes -->
+<div id="cadastroClientes" class="container">
+    <h2>Cadastro de Clientes</h2>
+    
+    <input type="text" id="clienteId" placeholder="ID do Cliente">
+    <input type="text" id="clienteNome" placeholder="Nome do Cliente">
+    <input type="text" id="clienteTelefone" placeholder="Telefone">
+    <input type="text" id="clienteCPF" placeholder="CPF">
+    <input type="number" id="clienteLimite" placeholder="Limite de Crédito">
+    <input type="text" id="clienteEndereco" placeholder="Endereço">
+    
+    <button onclick="cadastrarCliente()">Cadastrar Cliente</button>
+    
+    <div class="list" id="listaClientes"></div>
+  </div>
+    
+    <!-- Seção de consulta de clientes -->
+    <div id="consultaClientes" class="container">
+        <h2>Consulta de Clientes</h2>
+        <div class="list" id="listaConsultaClientes"></div>
+    </div>
+    
+    <!-- Seção de cadastro de produtos -->
+    <div id="cadastroProdutos" class="container">
+        <h2>Cadastro de Produtos</h2>
+        <input type="text" id="produtoNome" placeholder="Nome do Produto">
+        <input type="number" id="produtoPreco" placeholder="Preço">
+        <input type="text" id="produtoCodigoInterno" placeholder="Código Interno">
+        <input type="text" id="produtoCodigoExterno" placeholder="Código Externo">
+        <button onclick="cadastrarProduto()">Cadastrar Produto</button>
+        <div class="list" id="listaProdutos"></div>
+    </div>
+    
+    <!-- Seção de consulta de produtos -->
+    <div id="consultaProdutos" class="container">
+        <h2>Consulta de Produtos</h2>
+        <div class="list" id="listaConsultaProdutos"></div>
+    </div>
+    
+    <!-- Seção Quem Somos -->
+    <div id="quemsomos" class="container">
+        <h2>Quem Somos</h2>
+        <p>A Agro Vale é uma empresa dedicada ao fornecimento de insumos e produtos agropecuários, sempre prezando pela qualidade e atendimento personalizado aos nossos clientes.</p>
+        <p>Além disso, somos uma concessionária e revendedora oficial da marca Stihl, oferecendo equipamentos e ferramentas de alta qualidade para agricultura, jardinagem e manutenção em geral.</p>
+    </div>
+    
+    <script>
+        /**
+         * Verifica se o usuário está logado ao carregar a página.
+         * Se não estiver logado, redireciona para a tela de login.
+         */
+        function verificarLogin() {
+            let usuarioLogado = sessionStorage.getItem("usuarioLogado");
+            if (!usuarioLogado) {
+                window.location.href = "login.html"; // Redireciona para a tela de login
+            }
+        }
+
+        /**
+         * Mostra a seção correspondente ao clique no menu e oculta as demais.
+         * @param {string} secao - ID da seção a ser exibida.
+         */
+        function mostrarSecao(secao) {
+            let secoes = document.querySelectorAll('.container');
+            secoes.forEach(s => s.style.display = 'none');
+            document.getElementById(secao).style.display = 'block';
+        }
+
+        /**
+         * Cadastra um novo cliente e exibe na lista de clientes cadastrados.
+         */
+        function cadastrarCliente() {
+            let nome = document.getElementById('clienteNome').value;
+            let telefone = document.getElementById('clienteTelefone').value;
+            let endereco = document.getElementById('clienteEndereco').value;
+            
+            if (nome && telefone && endereco) {
+                let lista = document.getElementById('listaClientes');
+                let consulta = document.getElementById('listaConsultaClientes');
+                let clienteInfo = `<p><strong>${nome}</strong> - ${telefone} - ${endereco}</p>`;
+                lista.innerHTML += clienteInfo;
+                consulta.innerHTML += clienteInfo;
+            }
+        }
+
+        /**
+         * Cadastra um novo produto e exibe na lista de produtos cadastrados.
+         */
+        function cadastrarProduto() {
+            let nome = document.getElementById('produtoNome').value;
+            let preco = document.getElementById('produtoPreco').value;
+            let codigoInterno = document.getElementById('produtoCodigoInterno').value;
+            let codigoExterno = document.getElementById('produtoCodigoExterno').value;
+            
+            if (nome && preco && codigoInterno && codigoExterno) {
+                let lista = document.getElementById('listaProdutos');
+                let consulta = document.getElementById('listaConsultaProdutos');
+                let produtoInfo = `<p><strong>${nome}</strong> - R$${preco} - Código Interno: ${codigoInterno} - Código Externo: ${codigoExterno}</p>`;
+                lista.innerHTML += produtoInfo;
+                consulta.innerHTML += produtoInfo;
+            }
+        }
+    </script>
+</body>
+</html>

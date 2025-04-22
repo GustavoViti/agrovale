@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login</title>
+  <link rel="stylesheet" href="style/auth.css">
+
+  <!-- Firebase SDKs (modo compat) -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+
+  <script>
+    // Configuração do Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyDa5dqtuV2sTVh07NZafHVlYBO0EtvryUM",
+      authDomain: "agrovale-c4ce6.firebaseapp.com",
+      projectId: "agrovale-c4ce6",
+      storageBucket: "agrovale-c4ce6.appspot.com",
+      messagingSenderId: "292420787522",
+      appId: "1:292420787522:web:6bee092a1fcd877a257cdb",
+      measurementId: "G-K4E7781SQ6"
+    };
+
+    // Inicialização do Firebase
+    firebase.initializeApp(firebaseConfig);
+
+    // Login com e-mail e senha
+    function loginEmailSenha(event) {
+      event.preventDefault();
+
+      const email = document.getElementById('email').value;
+      const senha = document.getElementById('senha').value;
+
+      firebase.auth().signInWithEmailAndPassword(email, senha)
+        .then((userCredential) => {
+          console.log("Login realizado:", userCredential.user);
+          sessionStorage.setItem("usuarioLogado", true);
+          window.location.href = "index.html"; // Redireciona para o sistema
+        })
+        .catch((error) => {
+          alert("Erro ao fazer login: " + error.message);
+          console.error(error);
+        });
+    }
+
+    // Login com Google
+    function loginGoogle() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+
+      firebase.auth().signInWithPopup(provider)
+        .then((result) => {
+          console.log("Login com Google:", result.user);
+          sessionStorage.setItem("usuarioLogado", true);
+          window.location.href = "index.html";
+        })
+        .catch((error) => {
+          alert("Erro ao fazer login com Google: " + error.message);
+          console.error(error);
+        });
+    }
+  </script>
+</head>
+<body>
+  <div class="wrapper">
+    <form onsubmit="loginEmailSenha(event)">
+      <h2>Login</h2>
+
+      <div class="input-field">
+        <input type="text" id="email" required />
+        <label>Insira seu email</label>
+      </div>
+
+      <div class="input-field">
+        <input type="password" id="senha" required />
+        <label>Insira sua senha</label>
+      </div>
+
+      <div class="forget">
+        <label for="remember">
+          <input type="checkbox" id="remember" />
+          <p>Lembre de mim</p>
+        </label>
+        <a href="#">Esqueceu a senha?</a>
+      </div>
+
+      <button type="submit">Entrar</button>
+      <button type="button" onclick="loginGoogle()">Entrar com Google</button>
+
+      <div class="register">
+        <p>Não tem uma conta? <a href="cadastro.html">Cadastrar</a></p>
+      </div>
+    </form>
+  </div>
+</body>
+</html>
