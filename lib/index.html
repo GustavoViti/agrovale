@@ -1,132 +1,389 @@
 <!DOCTYPE html>
-<html lang="pt-BR"> <!-- Define que o documento está em português do Brasil – Gustavo Viti -->
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8"> <!-- Define a codificação de caracteres como UTF-8, suportando acentuação – Gustavo Viti -->
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"> <!-- Torna o site responsivo em dispositivos móveis – Gustavo Viti -->
-    <title>Agrovale</title> <!-- Define o título da aba do navegador – Gustavo Viti -->
-    <link rel="stylesheet" href="style/stile.css"> <!-- Linka uma folha de estilo externa (obs: verifique se o nome 'stile.css' está correto) – Gustavo Viti -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Agrovale</title>
+  <link rel="stylesheet" href="style/stile.css" />
 </head>
-<body onload="verificarLogin()"> <!-- Quando a página carregar, executa a função verificarLogin() para checar se o usuário está autenticado – Gustavo Viti -->
+<body onload="verificarLogin()">
 
-    <!-- Barra de navegação principal com links que mostram seções específicas da página – Gustavo Viti -->
-    <div class="navbar">
-        <a href="#" onclick="mostrarSecao('home')">Início</a> <!-- Mostra a seção inicial – Gustavo Viti -->
-        <a href="#" onclick="mostrarSecao('cadastroClientes')">Cadastro de Clientes</a> <!-- Mostra a seção de cadastro de clientes – Gustavo Viti -->
-        <a href="#" onclick="mostrarSecao('consultaClientes')">Consulta de Clientes</a> <!-- Mostra a seção de consulta de clientes – Gustavo Viti -->
-        <a href="#" onclick="mostrarSecao('cadastroProdutos')">Cadastro de Produtos</a> <!-- Mostra a seção de cadastro de produtos – Gustavo Viti -->
-        <a href="#" onclick="mostrarSecao('consultaProdutos')">Consulta de Produtos</a> <!-- Mostra a seção de consulta de produtos – Gustavo Viti -->
-        <a href="#" onclick="mostrarSecao('quemsomos')">Quem Somos</a> <!-- Mostra a seção de informações institucionais – Gustavo Viti -->
-    </div>
-    
-    <!-- Seção visível ao iniciar a página com mensagem de boas-vindas – Gustavo Viti -->
-    <div id="home" class="container" style="display: block;">
-        <h2>Bem-vindo à Agro Vale</h2>
-        <p>Selecione uma opção no menu para começar.</p>
-    </div>
-    
-    <!-- Seção de cadastro de clientes com inputs para inserir dados básicos – Gustavo Viti -->
-    <div id="cadastroClientes" class="container">
-        <h2>Cadastro de Clientes</h2>
-        
-        <!-- Campos de entrada de dados do cliente – Gustavo Viti -->
-        <input type="text" id="clienteId" placeholder="ID do Cliente">
-        <input type="text" id="clienteNome" placeholder="Nome do Cliente">
-        <input type="text" id="clienteTelefone" placeholder="Telefone">
-        <input type="text" id="clienteCPF" placeholder="CPF">
-        <input type="number" id="clienteLimite" placeholder="Limite de Crédito">
-        <input type="text" id="clienteEndereco" placeholder="Endereço">
-        
-        <button onclick="cadastrarCliente()">Cadastrar Cliente</button> <!-- Botão que aciona o cadastro de cliente – Gustavo Viti -->
-        
-        <div class="list" id="listaClientes"></div> <!-- Área onde será exibida a lista de clientes cadastrados – Gustavo Viti -->
-    </div>
-    
-    <!-- Seção onde os clientes cadastrados serão consultados – Gustavo Viti -->
-    <div id="consultaClientes" class="container">
-        <h2>Consulta de Clientes</h2>
-        <div class="list" id="listaConsultaClientes"></div> <!-- Lista visível de clientes cadastrados – Gustavo Viti -->
-    </div>
-    
-    <!-- Seção de cadastro de produtos com campos específicos – Gustavo Viti -->
-    <div id="cadastroProdutos" class="container">
-        <h2>Cadastro de Produtos</h2>
-        <input type="text" id="produtoNome" placeholder="Nome do Produto">
-        <input type="number" id="produtoPreco" placeholder="Preço">
-        <input type="text" id="produtoCodigoInterno" placeholder="Código Interno">
-        <input type="text" id="produtoCodigoExterno" placeholder="Código Externo">
-        <button onclick="cadastrarProduto()">Cadastrar Produto</button> <!-- Botão para cadastrar produto – Gustavo Viti -->
-        <div class="list" id="listaProdutos"></div> <!-- Lista onde os produtos cadastrados aparecem – Gustavo Viti -->
-    </div>
-    
-    <!-- Seção para consultar os produtos cadastrados – Gustavo Viti -->
-    <div id="consultaProdutos" class="container">
-        <h2>Consulta de Produtos</h2>
-        <div class="list" id="listaConsultaProdutos"></div> <!-- Exibição dos produtos cadastrados – Gustavo Viti -->
-    </div>
-    
-    <!-- Seção de informações sobre a empresa – Gustavo Viti -->
-    <div id="quemsomos" class="container">
-        <h2>Quem Somos</h2>
-        <p>A Agro Vale é uma empresa dedicada ao fornecimento de insumos e produtos agropecuários, sempre prezando pela qualidade e atendimento personalizado aos nossos clientes.</p>
-        <p>Além disso, somos uma concessionária e revendedora oficial da marca Stihl, oferecendo equipamentos e ferramentas de alta qualidade para agricultura, jardinagem e manutenção em geral.</p>
-    </div>
-    
-    <script>
-        /**
-         * Verifica se o usuário está logado ao carregar a página.
-         * Se não estiver logado, redireciona para a tela de login. – Gustavo Viti
-         */
-        function verificarLogin() {
-            let usuarioLogado = sessionStorage.getItem("usuarioLogado");
-            if (!usuarioLogado) {
-                window.location.href = "login.html"; // Redireciona para a tela de login – Gustavo Viti
-            }
-        }
+  <!-- Barra de navegação -->
+  <div class="navbar">
+    <a href="#" onclick="mostrarSecao('home')">Início</a>
+    <a href="#" onclick="mostrarSecao('cadastroClientes')">Cadastro de Clientes</a>
+    <a href="#" onclick="mostrarSecao('consultaClientes')">Consulta de Clientes</a>
+    <a href="#" onclick="mostrarSecao('cadastroProdutos')">Cadastro de Produtos</a>
+    <a href="#" onclick="mostrarSecao('consultaProdutos')">Consulta de Produtos</a>
+    <a href="#" onclick="mostrarSecao('quemsomos')">Quem Somos</a>
+  </div>
 
-        /**
-         * Mostra a seção correspondente ao clique no menu e oculta as demais.
-         * @param {string} secao - ID da seção a ser exibida. – Gustavo Viti
-         */
-        function mostrarSecao(secao) {
-            let secoes = document.querySelectorAll('.container');
-            secoes.forEach(s => s.style.display = 'none'); // Esconde todas as seções – Gustavo Viti
-            document.getElementById(secao).style.display = 'block'; // Exibe a seção selecionada – Gustavo Viti
-        }
+  <!-- Seção Home -->
+  <div id="home" class="container" style="display: block;">
+    <h2>Bem-vindo à Agro Vale</h2>
+    <p>Selecione uma opção no menu para começar.</p>
+  </div>
 
-        /**
-         * Cadastra um novo cliente e exibe na lista de clientes cadastrados. – Gustavo Viti
-         */
-        function cadastrarCliente() {
-            let nome = document.getElementById('clienteNome').value;
-            let telefone = document.getElementById('clienteTelefone').value;
-            let endereco = document.getElementById('clienteEndereco').value;
-            
-            if (nome && telefone && endereco) {
-                let lista = document.getElementById('listaClientes');
-                let consulta = document.getElementById('listaConsultaClientes');
-                let clienteInfo = `<p><strong>${nome}</strong> - ${telefone} - ${endereco}</p>`;
-                lista.innerHTML += clienteInfo; // Adiciona cliente na seção de cadastro – Gustavo Viti
-                consulta.innerHTML += clienteInfo; // Adiciona cliente na seção de consulta – Gustavo Viti
-            }
-        }
+  <!-- Cadastro de Clientes -->
+  <div id="cadastroClientes" class="container" style="display: none;">
+    <h2>Cadastro de Clientes</h2>
+    <div class="input-dupla">
+      <input type="text" id="clienteNome" placeholder="Nome">
+      <input type="text" id="clienteSobrenome" placeholder="Sobrenome">
+    </div>
+    <div class="input-dupla">
+      <input type="text" id="clienteTelefone" placeholder="Telefone">
+      <input type="text" id="clienteCPF" placeholder="000.000.000-00" maxlength="14" oninput="formatarCPF(this)">
+    </div>
+    <div class="input-dupla">
+      <input type="number" id="clienteLimite" placeholder="Limite de Crédito">
+      <input type="text" id="clienteCidade" placeholder="Cidade">
+    </div>
+    <div class="input-dupla">
+      <input type="text" id="clienteRua" placeholder="Rua">
+      <input type="text" id="clienteNumero" placeholder="Número">
+    </div>
+    <div class="input-dupla">
+      <input type="text" id="clienteBairro" placeholder="Bairro">
+    </div>
+    <button onclick="cadastrarCliente()">Cadastrar Cliente</button>
+  </div>
 
-        /**
-         * Cadastra um novo produto e exibe na lista de produtos cadastrados. – Gustavo Viti
-         */
-        function cadastrarProduto() {
-            let nome = document.getElementById('produtoNome').value;
-            let preco = document.getElementById('produtoPreco').value;
-            let codigoInterno = document.getElementById('produtoCodigoInterno').value;
-            let codigoExterno = document.getElementById('produtoCodigoExterno').value;
-            
-            if (nome && preco && codigoInterno && codigoExterno) {
-                let lista = document.getElementById('listaProdutos');
-                let consulta = document.getElementById('listaConsultaProdutos');
-                let produtoInfo = `<p><strong>${nome}</strong> - R$${preco} - Código Interno: ${codigoInterno} - Código Externo: ${codigoExterno}</p>`;
-                lista.innerHTML += produtoInfo; // Exibe produto na tela de cadastro – Gustavo Viti
-                consulta.innerHTML += produtoInfo; // Exibe produto também na seção de consulta – Gustavo Viti
-            }
+  <!-- Consulta de Clientes -->
+<div id="consultaClientes" class="container" style="display: none;">
+  <h2>Consulta de Clientes</h2>
+  <input type="text" id="pesquisaCliente" placeholder="Pesquisar por nome ou CPF..." oninput="consultarClientes()">
+  <div class="list" id="listaConsultaClientes"></div>
+</div>
+
+
+  <!-- Cadastro de Produtos -->
+  <div id="cadastroProdutos" class="container" style="display: none;">
+    <h2>Cadastro de Produtos</h2>
+    <input type="text" id="produtoNome" placeholder="Nome do Produto">
+    <input type="number" id="produtoPreco" placeholder="Preço">
+    <input type="text" id="produtoCodigoInterno" placeholder="Código Interno">
+    <input type="text" id="produtoCodigoExterno" placeholder="Código Externo">
+    <button onclick="cadastrarProduto()">Cadastrar Produto</button>
+    <div class="list" id="listaProdutos"></div>
+  </div>
+
+  <!-- Consulta de Produtos -->
+  <div id="consultaProdutos" class="container" style="display: none;">
+    <h2>Consulta de Produtos</h2>
+    <div class="list" id="listaConsultaProdutos"></div>
+  </div>
+
+  <!-- Quem Somos -->
+  <div id="quemsomos" class="container" style="display: none;">
+    <h2>Quem Somos</h2>
+    <p>A Agro Vale é uma empresa dedicada ao fornecimento de insumos e produtos agropecuários...</p>
+  </div>
+
+  <!-- Firebase e Lógica -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import {
+      getFirestore, collection, addDoc, getDocs,
+      query, orderBy, doc, updateDoc, deleteDoc
+    } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDa5dqtuV2sTVh07NZafHVlYBO0EtvryUM",
+      authDomain: "agrovale-c4ce6.firebaseapp.com",
+      projectId: "agrovale-c4ce6",
+      storageBucket: "agrovale-c4ce6.firebasestorage.app",
+      messagingSenderId: "292420787522",
+      appId: "1:292420787522:web:6bee092a1fcd877a257cdb",
+      measurementId: "G-K4E7781SQ6"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let clienteEmEdicaoId = null;
+
+    window.verificarLogin = function() {
+      const usuarioLogado = sessionStorage.getItem("usuarioLogado");
+      if (!usuarioLogado) {
+        window.location.href = "login.html";
+      }
+    };
+
+    window.mostrarSecao = function(secao) {
+      document.querySelectorAll('.container').forEach(s => s.style.display = 'none');
+      document.getElementById(secao).style.display = 'block';
+
+      if (secao === "consultaClientes") {
+        consultarClientes();
+      }
+    };
+
+    window.cadastrarCliente = async function () {
+      const nome = document.getElementById("clienteNome").value;
+      const sobrenome = document.getElementById("clienteSobrenome").value;
+      const telefone = document.getElementById("clienteTelefone").value;
+      const cpf = document.getElementById("clienteCPF").value;
+      const limite = parseFloat(document.getElementById("clienteLimite").value);
+      const cidade = document.getElementById("clienteCidade").value;
+      const rua = document.getElementById("clienteRua").value;
+      const numero = document.getElementById("clienteNumero").value;
+      const bairro = document.getElementById("clienteBairro").value;
+
+      if (nome && sobrenome && telefone && cpf && !isNaN(limite) && cidade && rua && numero && bairro) {
+        try {
+          const dadosCliente = {
+            nome,
+            sobrenome,
+            telefone,
+            cpf,
+            limite,
+            endereco: { cidade, rua, numero, bairro },
+            atualizadoEm: new Date()
+          };
+
+          if (clienteEmEdicaoId) {
+            await updateDoc(doc(db, "clientes", clienteEmEdicaoId), dadosCliente);
+            alert("Cliente atualizado com sucesso!");
+            clienteEmEdicaoId = null;
+          } else {
+            await addDoc(collection(db, "clientes"), {
+              ...dadosCliente,
+              criadoEm: new Date()
+            });
+            alert("Cliente cadastrado com sucesso!");
+          }
+
+          document.querySelectorAll("#cadastroClientes input").forEach(input => input.value = "");
+          mostrarSecao("consultaClientes");
+
+        } catch (error) {
+          console.error("Erro ao salvar cliente:", error);
+          alert("Erro ao salvar cliente.");
         }
-    </script>
+      } else {
+        alert("Preencha todos os campos.");
+      }
+    };
+
+   window.consultarClientes = async function () {
+  const lista = document.getElementById("listaConsultaClientes");
+  const termo = document.getElementById("pesquisaCliente").value.toLowerCase();
+  lista.innerHTML = "<p>Carregando...</p>";
+
+  try {
+    const q = query(collection(db, "clientes"), orderBy("nome"));
+    const querySnapshot = await getDocs(q);
+
+    if (querySnapshot.empty) {
+      lista.innerHTML = "<p>Nenhum cliente encontrado.</p>";
+      return;
+    }
+
+    let html = "";
+    querySnapshot.forEach((docSnap) => {
+      const c = docSnap.data();
+      const id = docSnap.id;
+
+      const nomeCompleto = `${c.nome} ${c.sobrenome}`.toLowerCase();
+      const cpf = c.cpf.toLowerCase();
+
+      // Filtro por nome ou CPF
+      if (termo && !nomeCompleto.includes(termo) && !cpf.includes(termo)) {
+        return;
+      }
+
+      html += `
+        <div class="cliente" style="margin-bottom: 15px;">
+          <p onclick="toggleDetalhes('${id}')" style="cursor: pointer; font-weight: bold;">${c.nome} ${c.sobrenome}</p>
+          <div id="detalhes-${id}" style="display: none; padding-left: 10px;">
+            <p>Telefone: ${c.telefone}</p>
+            <p>CPF: ${c.cpf}</p>
+            <p>Limite: R$ ${c.limite.toFixed(2)}</p>
+            <p>Endereço: ${c.endereco.rua}, ${c.endereco.numero} - ${c.endereco.bairro}, ${c.endereco.cidade}</p>
+            <button onclick="editarCliente('${id}', '${c.nome}', '${c.sobrenome}', '${c.telefone}', '${c.cpf}', ${c.limite}, '${c.endereco.cidade}', '${c.endereco.rua}', '${c.endereco.numero}', '${c.endereco.bairro}')">Editar</button>
+            <button onclick="excluirCliente('${id}')">Excluir</button>
+          </div>
+          <hr>
+        </div>
+      `;
+    });
+
+    lista.innerHTML = html || "<p>Nenhum cliente encontrado.</p>";
+
+  } catch (error) {
+    console.error("Erro ao consultar clientes:", error);
+    lista.innerHTML = "<p>Erro ao carregar clientes.</p>";
+  }
+};
+
+
+    window.editarCliente = function (id, nome, sobrenome, telefone, cpf, limite, cidade, rua, numero, bairro) {
+      clienteEmEdicaoId = id;
+      mostrarSecao("cadastroClientes");
+
+      document.getElementById("clienteNome").value = nome;
+      document.getElementById("clienteSobrenome").value = sobrenome;
+      document.getElementById("clienteTelefone").value = telefone;
+      document.getElementById("clienteCPF").value = cpf;
+      document.getElementById("clienteLimite").value = limite;
+      document.getElementById("clienteCidade").value = cidade;
+      document.getElementById("clienteRua").value = rua;
+      document.getElementById("clienteNumero").value = numero;
+      document.getElementById("clienteBairro").value = bairro;
+
+      alert("Agora você pode editar o cliente. Ao clicar em 'Cadastrar Cliente', os dados serão atualizados.");
+    };
+
+    window.excluirCliente = async function (id) {
+      if (confirm("Tem certeza que deseja excluir este cliente?")) {
+        try {
+          await deleteDoc(doc(db, "clientes", id));
+          alert("Cliente excluído com sucesso!");
+          consultarClientes();
+        } catch (error) {
+          console.error("Erro ao excluir cliente:", error);
+          alert("Erro ao excluir cliente.");
+        }
+      }
+    };
+
+    // Produtos (modo local por enquanto)
+    window.cadastrarProduto = function () {
+      const nome = document.getElementById("produtoNome").value;
+      const preco = document.getElementById("produtoPreco").value;
+      const codigoInterno = document.getElementById("produtoCodigoInterno").value;
+      const codigoExterno = document.getElementById("produtoCodigoExterno").value;
+
+      if (nome && preco && codigoInterno && codigoExterno) {
+        const lista = document.getElementById("listaProdutos");
+        const consulta = document.getElementById("listaConsultaProdutos");
+        const produtoInfo = `<p><strong>${nome}</strong> - R$${preco} - Código Interno: ${codigoInterno} - Código Externo: ${codigoExterno}</p>`;
+        lista.innerHTML += produtoInfo;
+        consulta.innerHTML += produtoInfo;
+      }
+    };
+
+    window.toggleDetalhes = function (id) {
+  const div = document.getElementById(`detalhes-${id}`);
+  if (div.style.display === "none") {
+    div.style.display = "block";
+  } else {
+    div.style.display = "none";
+  }
+};
+
+// Função para formatar o CPF
+function formatarCPF(input) {
+  let cpf = input.value.replace(/\D/g, ''); // Remove tudo o que não for número
+  if (cpf.length <= 9) {
+    cpf = cpf.replace(/(\d{3})(\d{0,3})/, '$1.$2');
+  } else if (cpf.length <= 11) {
+    cpf = cpf.replace(/(\d{3})(\d{3})(\d{0,3})/, '$1.$2.$3');
+  } else {
+    cpf = cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{1})/, '$1.$2.$3-$4');
+  }
+  input.value = cpf;
+}
+
+// Função para validar o CPF
+function validarCPF(cpf) {
+  cpf = cpf.replace(/\D/g, ''); // Remove tudo o que não for número
+
+  if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
+    return false; // CPF com todos os números iguais (ex: 111.111.111-11)
+  }
+
+  let soma = 0;
+  let resto;
+
+  // Validação do primeiro dígito verificador
+  for (let i = 1; i <= 9; i++) {
+    soma += parseInt(cpf.charAt(i - 1)) * (11 - i);
+  }
+
+  resto = (soma * 10) % 11;
+  if (resto === 10 || resto === 11) {
+    resto = 0;
+  }
+
+  if (resto !== parseInt(cpf.charAt(9))) {
+    return false;
+  }
+
+  soma = 0;
+  // Validação do segundo dígito verificador
+  for (let i = 1; i <= 10; i++) {
+    soma += parseInt(cpf.charAt(i - 1)) * (12 - i);
+  }
+
+  resto = (soma * 10) % 11;
+  if (resto === 10 || resto === 11) {
+    resto = 0;
+  }
+
+  if (resto !== parseInt(cpf.charAt(10))) {
+    return false;
+  }
+
+  return true; // CPF válido
+}
+
+// Função para cadastrar cliente com validação de CPF
+window.cadastrarCliente = async function () {
+  const nome = document.getElementById("clienteNome").value;
+  const sobrenome = document.getElementById("clienteSobrenome").value;
+  const telefone = document.getElementById("clienteTelefone").value;
+  const cpf = document.getElementById("clienteCPF").value;
+  const limite = parseFloat(document.getElementById("clienteLimite").value);
+  const cidade = document.getElementById("clienteCidade").value;
+  const rua = document.getElementById("clienteRua").value;
+  const numero = document.getElementById("clienteNumero").value;
+  const bairro = document.getElementById("clienteBairro").value;
+
+  // Verifica se o CPF é válido
+  if (!validarCPF(cpf)) {
+    alert("CPF inválido!");
+    return;
+  }
+
+  if (nome && sobrenome && telefone && cpf && !isNaN(limite) && cidade && rua && numero && bairro) {
+    try {
+      const dadosCliente = {
+        nome,
+        sobrenome,
+        telefone,
+        cpf,
+        limite,
+        endereco: { cidade, rua, numero, bairro },
+        atualizadoEm: new Date()
+      };
+
+      if (clienteEmEdicaoId) {
+        await updateDoc(doc(db, "clientes", clienteEmEdicaoId), dadosCliente);
+        alert("Cliente atualizado com sucesso!");
+        clienteEmEdicaoId = null;
+      } else {
+        await addDoc(collection(db, "clientes"), {
+          ...dadosCliente,
+          criadoEm: new Date()
+        });
+        alert("Cliente cadastrado com sucesso!");
+      }
+
+      document.querySelectorAll("#cadastroClientes input").forEach(input => input.value = "");
+      mostrarSecao("consultaClientes");
+
+    } catch (error) {
+      console.error("Erro ao salvar cliente:", error);
+      alert("Erro ao salvar cliente.");
+    }
+  } else {
+    alert("Preencha todos os campos.");
+  }
+};
+
+  </script>
+
 </body>
 </html>
