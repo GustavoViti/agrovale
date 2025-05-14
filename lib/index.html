@@ -10,6 +10,7 @@
 
   <!-- Barra de navegação -->
   <div class="navbar">
+    <a href="#"><img src="style/img/logo.png" alt="" style="height: 40px;"></a>
     <a href="#" onclick="mostrarSecao('home')">Início</a>
     <a href="#" onclick="mostrarSecao('cadastroClientes')">Cadastro de Clientes</a>
     <a href="#" onclick="mostrarSecao('consultaClientes')">Consulta de Clientes</a>
@@ -57,22 +58,37 @@
 </div>
 
 
-  <!-- Cadastro de Produtos -->
-  <div id="cadastroProdutos" class="container" style="display: none;">
-    <h2>Cadastro de Produtos</h2>
-    <input type="text" id="produtoNome" placeholder="Nome do Produto">
-    <input type="number" id="produtoPreco" placeholder="Preço">
-    <input type="text" id="produtoCodigoInterno" placeholder="Código Interno">
-    <input type="text" id="produtoCodigoExterno" placeholder="Código Externo">
-    <button onclick="cadastrarProduto()">Cadastrar Produto</button>
-    <div class="list" id="listaProdutos"></div>
-  </div>
+ <!-- Cadastro de Produtos -->
+<div id="cadastroProdutos" class="container" style="display: none;">
+  <h2>Cadastro de Produtos</h2>
+  
+  <input type="text" id="produtoNome" placeholder="Nome do Produto">
+<input type="text" id="produtoMarca" placeholder="Marca">
+<input type="number" id="produtoPrecoCusto" placeholder="Preço de Custo" step="0.01" min="0">
+<input type="number" id="produtoMargemLucro" placeholder="Margem de Lucro (%)" step="0.1" min="0">
+<select id="produtoCategoria">
+  <option value="" disabled selected>Selecione a Categoria</option>
+  <option value="Alimentos">Alimentos</option>
+  <option value="Bebidas">Bebidas</option>
+  <option value="Higiene">Higiene</option>
+  <option value="Limpeza">Limpeza</option>
+  <option value="Outros">Outros</option>
+</select>
+<input type="text" id="produtoCodigoExterno" placeholder="Código Externo">
+<textarea id="produtoDescricao" placeholder="Descrição" rows="3"></textarea>
 
-  <!-- Consulta de Produtos -->
-  <div id="consultaProdutos" class="container" style="display: none;">
-    <h2>Consulta de Produtos</h2>
-    <div class="list" id="listaConsultaProdutos"></div>
-  </div>
+
+  <button onclick="cadastrarProduto()">Cadastrar Produto</button>
+  
+  <div class="list" id="listaProdutos"></div>
+</div>
+
+<!-- Consulta de Produtos -->
+<div id="consultaProdutos" class="container" style="display: none;">
+  <h2>Consulta de Produtos</h2>
+  <div class="list" id="listaConsultaProdutos"></div>
+</div>
+
 
   <!-- Quem Somos -->
   <div id="quemsomos" class="container" style="display: none;">
@@ -82,308 +98,290 @@
 
   <!-- Firebase e Lógica -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-    import {
-      getFirestore, collection, addDoc, getDocs,
-      query, orderBy, doc, updateDoc, deleteDoc
-    } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+  import {
+    getFirestore, collection, addDoc, getDocs,
+    query, orderBy, doc, updateDoc, deleteDoc
+  } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyDa5dqtuV2sTVh07NZafHVlYBO0EtvryUM",
-      authDomain: "agrovale-c4ce6.firebaseapp.com",
-      projectId: "agrovale-c4ce6",
-      storageBucket: "agrovale-c4ce6.firebasestorage.app",
-      messagingSenderId: "292420787522",
-      appId: "1:292420787522:web:6bee092a1fcd877a257cdb",
-      measurementId: "G-K4E7781SQ6"
-    };
+  const firebaseConfig = {
+    apiKey: "AIzaSyDa5dqtuV2sTVh07NZafHVlYBO0EtvryUM",
+    authDomain: "agrovale-c4ce6.firebaseapp.com",
+    projectId: "agrovale-c4ce6",
+    storageBucket: "agrovale-c4ce6.firebasestorage.app",
+    messagingSenderId: "292420787522",
+    appId: "1:292420787522:web:6bee092a1fcd877a257cdb",
+    measurementId: "G-K4E7781SQ6"
+  };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-    let clienteEmEdicaoId = null;
+  let clienteEmEdicaoId = null;
 
-    window.verificarLogin = function() {
-      const usuarioLogado = sessionStorage.getItem("usuarioLogado");
-      if (!usuarioLogado) {
-        window.location.href = "login.html";
-      }
-    };
+  window.verificarLogin = function() {
+    const usuarioLogado = sessionStorage.getItem("usuarioLogado");
+    if (!usuarioLogado) {
+      window.location.href = "login.html";
+    }
+  };
 
-    window.mostrarSecao = function(secao) {
-      document.querySelectorAll('.container').forEach(s => s.style.display = 'none');
-      document.getElementById(secao).style.display = 'block';
+  window.mostrarSecao = function(secao) {
+    document.querySelectorAll('.container').forEach(s => s.style.display = 'none');
+    document.getElementById(secao).style.display = 'block';
 
-      if (secao === "consultaClientes") {
-        consultarClientes();
-      }
-    };
+    if (secao === "consultaClientes") {
+      consultarClientes();
+    }
+  };
 
-    window.cadastrarCliente = async function () {
-      const nome = document.getElementById("clienteNome").value;
-      const sobrenome = document.getElementById("clienteSobrenome").value;
-      const telefone = document.getElementById("clienteTelefone").value;
-      const cpf = document.getElementById("clienteCPF").value;
-      const limite = parseFloat(document.getElementById("clienteLimite").value);
-      const cidade = document.getElementById("clienteCidade").value;
-      const rua = document.getElementById("clienteRua").value;
-      const numero = document.getElementById("clienteNumero").value;
-      const bairro = document.getElementById("clienteBairro").value;
+  window.cadastrarCliente = async function () {
+    const nome = document.getElementById("clienteNome").value;
+    const sobrenome = document.getElementById("clienteSobrenome").value;
+    const telefone = document.getElementById("clienteTelefone").value;
+    const cpf = document.getElementById("clienteCPF").value;
+    const limite = parseFloat(document.getElementById("clienteLimite").value);
+    const cidade = document.getElementById("clienteCidade").value;
+    const rua = document.getElementById("clienteRua").value;
+    const numero = document.getElementById("clienteNumero").value;
+    const bairro = document.getElementById("clienteBairro").value;
 
-      if (nome && sobrenome && telefone && cpf && !isNaN(limite) && cidade && rua && numero && bairro) {
-        try {
-          const dadosCliente = {
-            nome,
-            sobrenome,
-            telefone,
-            cpf,
-            limite,
-            endereco: { cidade, rua, numero, bairro },
-            atualizadoEm: new Date()
-          };
-
-          if (clienteEmEdicaoId) {
-            await updateDoc(doc(db, "clientes", clienteEmEdicaoId), dadosCliente);
-            alert("Cliente atualizado com sucesso!");
-            clienteEmEdicaoId = null;
-          } else {
-            await addDoc(collection(db, "clientes"), {
-              ...dadosCliente,
-              criadoEm: new Date()
-            });
-            alert("Cliente cadastrado com sucesso!");
-          }
-
-          document.querySelectorAll("#cadastroClientes input").forEach(input => input.value = "");
-          mostrarSecao("consultaClientes");
-
-        } catch (error) {
-          console.error("Erro ao salvar cliente:", error);
-          alert("Erro ao salvar cliente.");
-        }
-      } else {
-        alert("Preencha todos os campos.");
-      }
-    };
-
-   window.consultarClientes = async function () {
-  const lista = document.getElementById("listaConsultaClientes");
-  const termo = document.getElementById("pesquisaCliente").value.toLowerCase();
-  lista.innerHTML = "<p>Carregando...</p>";
-
-  try {
-    const q = query(collection(db, "clientes"), orderBy("nome"));
-    const querySnapshot = await getDocs(q);
-
-    if (querySnapshot.empty) {
-      lista.innerHTML = "<p>Nenhum cliente encontrado.</p>";
+    if (!validarCPF(cpf)) {
+      alert("CPF inválido!");
       return;
     }
 
-    let html = "";
-    querySnapshot.forEach((docSnap) => {
-      const c = docSnap.data();
-      const id = docSnap.id;
+    if (nome && sobrenome && telefone && cpf && !isNaN(limite) && cidade && rua && numero && bairro) {
+      try {
+        const dadosCliente = {
+          nome,
+          sobrenome,
+          telefone,
+          cpf,
+          limite,
+          endereco: { cidade, rua, numero, bairro },
+          atualizadoEm: new Date()
+        };
 
-      const nomeCompleto = `${c.nome} ${c.sobrenome}`.toLowerCase();
-      const cpf = c.cpf.toLowerCase();
+        if (clienteEmEdicaoId) {
+          await updateDoc(doc(db, "clientes", clienteEmEdicaoId), dadosCliente);
+          alert("Cliente atualizado com sucesso!");
+          clienteEmEdicaoId = null;
+        } else {
+          await addDoc(collection(db, "clientes"), {
+            ...dadosCliente,
+            criadoEm: new Date()
+          });
+          alert("Cliente cadastrado com sucesso!");
+        }
 
-      // Filtro por nome ou CPF
-      if (termo && !nomeCompleto.includes(termo) && !cpf.includes(termo)) {
+        document.querySelectorAll("#cadastroClientes input").forEach(input => input.value = "");
+        mostrarSecao("consultaClientes");
+
+      } catch (error) {
+        console.error("Erro ao salvar cliente:", error);
+        alert("Erro ao salvar cliente.");
+      }
+    } else {
+      alert("Preencha todos os campos.");
+    }
+  };
+
+  window.consultarClientes = async function () {
+    const lista = document.getElementById("listaConsultaClientes");
+    const termo = document.getElementById("pesquisaCliente").value.toLowerCase();
+    lista.innerHTML = "<p>Carregando...</p>";
+
+    try {
+      const q = query(collection(db, "clientes"), orderBy("nome"));
+      const querySnapshot = await getDocs(q);
+
+      if (querySnapshot.empty) {
+        lista.innerHTML = "<p>Nenhum cliente encontrado.</p>";
         return;
       }
 
-      html += `
-        <div class="cliente" style="margin-bottom: 15px;">
-          <p onclick="toggleDetalhes('${id}')" style="cursor: pointer; font-weight: bold;">${c.nome} ${c.sobrenome}</p>
-          <div id="detalhes-${id}" style="display: none; padding-left: 10px;">
-            <p>Telefone: ${c.telefone}</p>
-            <p>CPF: ${c.cpf}</p>
-            <p>Limite: R$ ${c.limite.toFixed(2)}</p>
-            <p>Endereço: ${c.endereco.rua}, ${c.endereco.numero} - ${c.endereco.bairro}, ${c.endereco.cidade}</p>
-            <button onclick="editarCliente('${id}', '${c.nome}', '${c.sobrenome}', '${c.telefone}', '${c.cpf}', ${c.limite}, '${c.endereco.cidade}', '${c.endereco.rua}', '${c.endereco.numero}', '${c.endereco.bairro}')">Editar</button>
-            <button onclick="excluirCliente('${id}')">Excluir</button>
-          </div>
-          <hr>
-        </div>
-      `;
-    });
+      let html = "";
+      querySnapshot.forEach((docSnap) => {
+        const c = docSnap.data();
+        const id = docSnap.id;
 
-    lista.innerHTML = html || "<p>Nenhum cliente encontrado.</p>";
+        const nomeCompleto = `${c.nome} ${c.sobrenome}`.toLowerCase();
+        const cpf = c.cpf.toLowerCase();
 
-  } catch (error) {
-    console.error("Erro ao consultar clientes:", error);
-    lista.innerHTML = "<p>Erro ao carregar clientes.</p>";
-  }
-};
-
-
-    window.editarCliente = function (id, nome, sobrenome, telefone, cpf, limite, cidade, rua, numero, bairro) {
-      clienteEmEdicaoId = id;
-      mostrarSecao("cadastroClientes");
-
-      document.getElementById("clienteNome").value = nome;
-      document.getElementById("clienteSobrenome").value = sobrenome;
-      document.getElementById("clienteTelefone").value = telefone;
-      document.getElementById("clienteCPF").value = cpf;
-      document.getElementById("clienteLimite").value = limite;
-      document.getElementById("clienteCidade").value = cidade;
-      document.getElementById("clienteRua").value = rua;
-      document.getElementById("clienteNumero").value = numero;
-      document.getElementById("clienteBairro").value = bairro;
-
-      alert("Agora você pode editar o cliente. Ao clicar em 'Cadastrar Cliente', os dados serão atualizados.");
-    };
-
-    window.excluirCliente = async function (id) {
-      if (confirm("Tem certeza que deseja excluir este cliente?")) {
-        try {
-          await deleteDoc(doc(db, "clientes", id));
-          alert("Cliente excluído com sucesso!");
-          consultarClientes();
-        } catch (error) {
-          console.error("Erro ao excluir cliente:", error);
-          alert("Erro ao excluir cliente.");
+        if (termo && !nomeCompleto.includes(termo) && !cpf.includes(termo)) {
+          return;
         }
+
+        html += `
+          <div class="cliente" style="margin-bottom: 15px;">
+            <p onclick="toggleDetalhes('${id}')" style="cursor: pointer; font-weight: bold;">${c.nome} ${c.sobrenome}</p>
+            <div id="detalhes-${id}" style="display: none; padding-left: 10px;">
+              <p>Telefone: ${c.telefone}</p>
+              <p>CPF: ${c.cpf}</p>
+              <p>Limite: R$ ${c.limite.toFixed(2)}</p>
+              <p>Endereço: ${c.endereco.rua}, ${c.endereco.numero} - ${c.endereco.bairro}, ${c.endereco.cidade}</p>
+              <button onclick="editarCliente('${id}', '${c.nome}', '${c.sobrenome}', '${c.telefone}', '${c.cpf}', ${c.limite}, '${c.endereco.cidade}', '${c.endereco.rua}', '${c.endereco.numero}', '${c.endereco.bairro}')">Editar</button>
+              <button onclick="excluirCliente('${id}')">Excluir</button>
+            </div>
+            <hr>
+          </div>
+        `;
+      });
+
+      lista.innerHTML = html || "<p>Nenhum cliente encontrado.</p>";
+
+    } catch (error) {
+      console.error("Erro ao consultar clientes:", error);
+      lista.innerHTML = "<p>Erro ao carregar clientes.</p>";
+    }
+  };
+
+  window.editarCliente = function (id, nome, sobrenome, telefone, cpf, limite, cidade, rua, numero, bairro) {
+    clienteEmEdicaoId = id;
+    mostrarSecao("cadastroClientes");
+
+    document.getElementById("clienteNome").value = nome;
+    document.getElementById("clienteSobrenome").value = sobrenome;
+    document.getElementById("clienteTelefone").value = telefone;
+    document.getElementById("clienteCPF").value = cpf;
+    document.getElementById("clienteLimite").value = limite;
+    document.getElementById("clienteCidade").value = cidade;
+    document.getElementById("clienteRua").value = rua;
+    document.getElementById("clienteNumero").value = numero;
+    document.getElementById("clienteBairro").value = bairro;
+
+    alert("Agora você pode editar o cliente. Ao clicar em 'Cadastrar Cliente', os dados serão atualizados.");
+  };
+
+  window.excluirCliente = async function (id) {
+    if (confirm("Tem certeza que deseja excluir este cliente?")) {
+      try {
+        await deleteDoc(doc(db, "clientes", id));
+        alert("Cliente excluído com sucesso!");
+        consultarClientes();
+      } catch (error) {
+        console.error("Erro ao excluir cliente:", error);
+        alert("Erro ao excluir cliente.");
       }
-    };
+    }
+  };
 
-    // Produtos (modo local por enquanto)
-    window.cadastrarProduto = function () {
-      const nome = document.getElementById("produtoNome").value;
-      const preco = document.getElementById("produtoPreco").value;
-      const codigoInterno = document.getElementById("produtoCodigoInterno").value;
-      const codigoExterno = document.getElementById("produtoCodigoExterno").value;
+  window.toggleDetalhes = function (id) {
+    const div = document.getElementById(`detalhes-${id}`);
+    div.style.display = div.style.display === "none" ? "block" : "none";
+  };
 
-      if (nome && preco && codigoInterno && codigoExterno) {
-        const lista = document.getElementById("listaProdutos");
-        const consulta = document.getElementById("listaConsultaProdutos");
-        const produtoInfo = `<p><strong>${nome}</strong> - R$${preco} - Código Interno: ${codigoInterno} - Código Externo: ${codigoExterno}</p>`;
-        lista.innerHTML += produtoInfo;
-        consulta.innerHTML += produtoInfo;
-      }
-    };
-
-    window.toggleDetalhes = function (id) {
-  const div = document.getElementById(`detalhes-${id}`);
-  if (div.style.display === "none") {
-    div.style.display = "block";
-  } else {
-    div.style.display = "none";
-  }
-};
-
-// Função para formatar o CPF
-function formatarCPF(input) {
-  let cpf = input.value.replace(/\D/g, ''); // Remove tudo o que não for número
-  if (cpf.length <= 9) {
-    cpf = cpf.replace(/(\d{3})(\d{0,3})/, '$1.$2');
-  } else if (cpf.length <= 11) {
-    cpf = cpf.replace(/(\d{3})(\d{3})(\d{0,3})/, '$1.$2.$3');
-  } else {
-    cpf = cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{1})/, '$1.$2.$3-$4');
-  }
-  input.value = cpf;
-}
-
-// Função para validar o CPF
-function validarCPF(cpf) {
-  cpf = cpf.replace(/\D/g, ''); // Remove tudo o que não for número
-
-  if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
-    return false; // CPF com todos os números iguais (ex: 111.111.111-11)
+  function formatarCPF(input) {
+    let cpf = input.value.replace(/\D/g, ''); // Remove tudo o que não for número
+    if (cpf.length <= 9) {
+      cpf = cpf.replace(/(\d{3})(\d{0,3})/, '$1.$2');
+    } else if (cpf.length <= 11) {
+      cpf = cpf.replace(/(\d{3})(\d{3})(\d{0,3})/, '$1.$2.$3');
+    } else {
+      cpf = cpf.replace(/(\d{3})(\d{3})(\d{3})(\d{1})/, '$1.$2.$3-$4');
+    }
+    input.value = cpf;
   }
 
-  let soma = 0;
-  let resto;
+  function validarCPF(cpf) {
+    cpf = cpf.replace(/\D/g, ''); // Remove tudo o que não for número
 
-  // Validação do primeiro dígito verificador
-  for (let i = 1; i <= 9; i++) {
-    soma += parseInt(cpf.charAt(i - 1)) * (11 - i);
+    if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
+      return false; // CPF com todos os números iguais (ex: 111.111.111-11)
+    }
+
+    let soma = 0;
+    let resto;
+
+    for (let i = 1; i <= 9; i++) {
+      soma += parseInt(cpf.charAt(i - 1)) * (11 - i);
+    }
+
+    resto = (soma * 10) % 11;
+    if (resto === 10 || resto === 11) {
+      resto = 0;
+    }
+
+    if (resto !== parseInt(cpf.charAt(9))) {
+      return false;
+    }
+
+    soma = 0;
+    for (let i = 1; i <= 10; i++) {
+      soma += parseInt(cpf.charAt(i - 1)) * (12 - i);
+    }
+
+    resto = (soma * 10) % 11;
+    if (resto === 10 || resto === 11) {
+      resto = 0;
+    }
+
+    if (resto !== parseInt(cpf.charAt(10))) {
+      return false;
+    }
+
+    return true; // CPF válido
   }
 
-  resto = (soma * 10) % 11;
-  if (resto === 10 || resto === 11) {
-    resto = 0;
-  }
+  window.cadastrarProduto = async function() {
+  const nome = document.getElementById("produtoNome").value.trim();
+  const marca = document.getElementById("produtoMarca").value.trim();
+  const precoCusto = parseFloat(document.getElementById("produtoPrecoCusto").value);
+  const margemLucro = parseFloat(document.getElementById("produtoMargemLucro").value);
+  const categoria = document.getElementById("produtoCategoria").value;
+  const codigoExterno = document.getElementById("produtoCodigoExterno").value.trim();
+  const descricao = document.getElementById("produtoDescricao").value.trim();
 
-  if (resto !== parseInt(cpf.charAt(9))) {
-    return false;
-  }
-
-  soma = 0;
-  // Validação do segundo dígito verificador
-  for (let i = 1; i <= 10; i++) {
-    soma += parseInt(cpf.charAt(i - 1)) * (12 - i);
-  }
-
-  resto = (soma * 10) % 11;
-  if (resto === 10 || resto === 11) {
-    resto = 0;
-  }
-
-  if (resto !== parseInt(cpf.charAt(10))) {
-    return false;
-  }
-
-  return true; // CPF válido
-}
-
-// Função para cadastrar cliente com validação de CPF
-window.cadastrarCliente = async function () {
-  const nome = document.getElementById("clienteNome").value;
-  const sobrenome = document.getElementById("clienteSobrenome").value;
-  const telefone = document.getElementById("clienteTelefone").value;
-  const cpf = document.getElementById("clienteCPF").value;
-  const limite = parseFloat(document.getElementById("clienteLimite").value);
-  const cidade = document.getElementById("clienteCidade").value;
-  const rua = document.getElementById("clienteRua").value;
-  const numero = document.getElementById("clienteNumero").value;
-  const bairro = document.getElementById("clienteBairro").value;
-
-  // Verifica se o CPF é válido
-  if (!validarCPF(cpf)) {
-    alert("CPF inválido!");
+  if (!nome || !marca || isNaN(precoCusto) || isNaN(margemLucro) || !categoria || !codigoExterno) {
+    alert("Preencha todos os campos obrigatórios.");
     return;
   }
 
-  if (nome && sobrenome && telefone && cpf && !isNaN(limite) && cidade && rua && numero && bairro) {
-    try {
-      const dadosCliente = {
-        nome,
-        sobrenome,
-        telefone,
-        cpf,
-        limite,
-        endereco: { cidade, rua, numero, bairro },
-        atualizadoEm: new Date()
-      };
+  const precoVenda = precoCusto + (precoCusto * margemLucro / 100);
 
-      if (clienteEmEdicaoId) {
-        await updateDoc(doc(db, "clientes", clienteEmEdicaoId), dadosCliente);
-        alert("Cliente atualizado com sucesso!");
-        clienteEmEdicaoId = null;
-      } else {
-        await addDoc(collection(db, "clientes"), {
-          ...dadosCliente,
-          criadoEm: new Date()
-        });
-        alert("Cliente cadastrado com sucesso!");
-      }
+  const produto = {
+    nome,
+    marca,
+    preco_custo: precoCusto,
+    margem_lucro: margemLucro,
+    preco_venda: precoVenda,
+    categoria,
+    codigo_externo: codigoExterno,
+    descricao
+  };
 
-      document.querySelectorAll("#cadastroClientes input").forEach(input => input.value = "");
-      mostrarSecao("consultaClientes");
+  try {
+    const resposta = await fetch("http://localhost:3000/api/produtos", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(produto)
+    });
 
-    } catch (error) {
-      console.error("Erro ao salvar cliente:", error);
-      alert("Erro ao salvar cliente.");
+    if (resposta.ok) {
+      alert("Produto cadastrado com sucesso!");
+
+      // Limpa os campos
+      document.getElementById("produtoNome").value = "";
+      document.getElementById("produtoMarca").value = "";
+      document.getElementById("produtoPrecoCusto").value = "";
+      document.getElementById("produtoMargemLucro").value = "";
+      document.getElementById("produtoCategoria").selectedIndex = 0;
+      document.getElementById("produtoCodigoExterno").value = "";
+      document.getElementById("produtoDescricao").value = "";
+
+    } else {
+      const erro = await resposta.text();
+      alert("Erro ao cadastrar produto: " + erro);
     }
-  } else {
-    alert("Preencha todos os campos.");
+  } catch (erro) {
+    console.error("Erro na requisição:", erro);
+    alert("Erro ao conectar com o servidor.");
   }
 };
 
-  </script>
+</script>
+
 
 </body>
 </html>

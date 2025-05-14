@@ -8,20 +8,20 @@ body {
     }
     .navbar {
       background-color: #f68221;
-      padding: 15px;
+      padding: 10px;
     }
     .navbar a {
       color: white;
       text-decoration: none;
       margin: 15px;
       font-size: 18px;
-      opacity: 0.6;
       transition: 0.3s;
     }
     .navbar a:hover {
-      text-decoration: underline;
-      color: #4e7573;
+      text-decoration: solid;
+      color: #0f9600;
       opacity: 1;
+      font-weight: bold;
     }
     .container {
       width: 50%;
