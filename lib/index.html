@@ -68,10 +68,10 @@
 <input type="number" id="produtoMargemLucro" placeholder="Margem de Lucro (%)" step="0.1" min="0">
 <select id="produtoCategoria">
   <option value="" disabled selected>Selecione a Categoria</option>
-  <option value="Alimentos">Alimentos</option>
-  <option value="Bebidas">Bebidas</option>
-  <option value="Higiene">Higiene</option>
-  <option value="Limpeza">Limpeza</option>
+  <option value="Pesca">Pesca</option>
+  <option value="Ferramenta">Ferra</option>
+  <option value="Jardinagem">Jardinagem</option>
+  <option value="Petshop">Petshop</option>
   <option value="Outros">Outros</option>
 </select>
 <input type="text" id="produtoCodigoExterno" placeholder="Código Externo">
@@ -83,11 +83,12 @@
   <div class="list" id="listaProdutos"></div>
 </div>
 
-<!-- Consulta de Produtos -->
 <div id="consultaProdutos" class="container" style="display: none;">
   <h2>Consulta de Produtos</h2>
+  <input type="text" id="pesquisaProduto" placeholder="Pesquisar por nome, marca ou código..." oninput="consultarProdutos()">
   <div class="list" id="listaConsultaProdutos"></div>
 </div>
+
 
 
   <!-- Quem Somos -->
@@ -131,8 +132,11 @@
     document.getElementById(secao).style.display = 'block';
 
     if (secao === "consultaClientes") {
-      consultarClientes();
-    }
+  consultarClientes();
+} else if (secao === "consultaProdutos") {
+  consultarProdutos();
+}
+
   };
 
   window.cadastrarCliente = async function () {
@@ -272,6 +276,12 @@
     div.style.display = div.style.display === "none" ? "block" : "none";
   };
 
+  window.toggleDetalhesProduto = function (id) {
+  const div = document.getElementById(`detalhes-produto-${id}`);
+  div.style.display = div.style.display === "none" ? "block" : "none";
+};
+
+
   function formatarCPF(input) {
     let cpf = input.value.replace(/\D/g, ''); // Remove tudo o que não for número
     if (cpf.length <= 9) {
@@ -379,6 +389,59 @@
     alert("Erro ao conectar com o servidor.");
   }
 };
+
+window.consultarProdutos = async function () {
+  const lista = document.getElementById("listaConsultaProdutos");
+  const termo = document.getElementById("pesquisaProduto").value.toLowerCase();
+  lista.innerHTML = "<p>Carregando...</p>";
+
+  try {
+    const resposta = await fetch("http://localhost:3000/api/produtos");
+    if (!resposta.ok) {
+      throw new Error("Erro ao buscar produtos");
+    }
+
+    const produtos = await resposta.json();
+
+    if (produtos.length === 0) {
+      lista.innerHTML = "<p>Nenhum produto encontrado.</p>";
+      return;
+    }
+
+    let html = "";
+    produtos.forEach(p => {
+      const nome = p.nome.toLowerCase();
+      const marca = p.marca.toLowerCase();
+      const codigo = p.codigo_externo.toLowerCase();
+
+      if (termo && !nome.includes(termo) && !marca.includes(termo) && !codigo.includes(termo)) {
+        return;
+      }
+
+      html += `
+        <div class="produto" style="margin-bottom: 15px;">
+          <p onclick="toggleDetalhesProduto('${p.id}')" style="cursor: pointer; font-weight: bold;">${p.nome} (${p.marca})</p>
+          <div id="detalhes-produto-${p.id}" style="display: none; padding-left: 10px;">
+            <p>Categoria: ${p.categoria}</p>
+            <p>Preço de Custo: R$ ${parseFloat(p.preco_custo).toFixed(2)}</p>
+            <p>Margem de Lucro: ${p.margem_lucro}%</p>
+            <p>Preço de Venda: R$ ${parseFloat(p.preco_venda).toFixed(2)}</p>
+            <p>Código Externo: ${p.codigo_externo}</p>
+            <p>Descrição: ${p.descricao || "N/A"}</p>
+          </div>
+          <hr>
+        </div>
+      `;
+    });
+
+    lista.innerHTML = html || "<p>Nenhum produto corresponde à pesquisa.</p>";
+
+  } catch (erro) {
+    console.error("Erro ao consultar produtos:", erro);
+    lista.innerHTML = "<p>Erro ao carregar produtos.</p>";
+  }
+};
+
 
 </script>
 
