@@ -5,97 +5,100 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Agrovale</title>
   <link rel="stylesheet" href="style/stile.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 </head>
 <body onload="verificarLogin()">
 
   <!-- Barra de navegação -->
   <div class="navbar">
-    <a href="#"><img src="style/img/logo.png" alt="" style="height: 40px;"></a>
-    <a href="#" onclick="mostrarSecao('home')">Início</a>
-    <a href="#" onclick="mostrarSecao('cadastroClientes')">Cadastro de Clientes</a>
-    <a href="#" onclick="mostrarSecao('consultaClientes')">Consulta de Clientes</a>
-    <a href="#" onclick="mostrarSecao('cadastroProdutos')">Cadastro de Produtos</a>
-    <a href="#" onclick="mostrarSecao('consultaProdutos')">Consulta de Produtos</a>
-    <a href="#" onclick="mostrarSecao('quemsomos')">Quem Somos</a>
+    <a href="#"><img src="style/img/logo.png" alt="Logo Agrovale" style="height: 40px;"></a>
+    <a href="#" onclick="mostrarSecao('home')"><i class="fa-solid fa-house"></i> Início</a>
+    <a href="#" onclick="mostrarSecao('cadastroClientes')"><i class="fa-solid fa-user-plus"></i> Cadastro de Clientes</a>
+    <a href="#" onclick="mostrarSecao('consultaClientes')"><i class="fa-solid fa-magnifying-glass"></i> Consulta de Clientes</a>
+    <a href="#" onclick="mostrarSecao('cadastroProdutos')"><i class="fa-solid fa-box"></i> Cadastro de Produtos</a>
+    <a href="#" onclick="mostrarSecao('consultaProdutos')"><i class="fa-solid fa-search"></i> Consulta de Produtos</a>
+    <a href="#" onclick="mostrarSecao('quemsomos')"><i class="fa-solid fa-users"></i> Quem Somos</a>
   </div>
 
   <!-- Seção Home -->
-  <div id="home" class="container" style="display: block;">
+  <div id="home" class="container">
     <h2>Bem-vindo à Agro Vale</h2>
     <p>Selecione uma opção no menu para começar.</p>
   </div>
 
   <!-- Cadastro de Clientes -->
-  <div id="cadastroClientes" class="container" style="display: none;">
-    <h2>Cadastro de Clientes</h2>
-    <div class="input-dupla">
-      <input type="text" id="clienteNome" placeholder="Nome">
-      <input type="text" id="clienteSobrenome" placeholder="Sobrenome">
-    </div>
-    <div class="input-dupla">
-      <input type="text" id="clienteTelefone" placeholder="Telefone">
-      <input type="text" id="clienteCPF" placeholder="000.000.000-00" maxlength="14" oninput="formatarCPF(this)">
-    </div>
-    <div class="input-dupla">
-      <input type="number" id="clienteLimite" placeholder="Limite de Crédito">
-      <input type="text" id="clienteCidade" placeholder="Cidade">
-    </div>
-    <div class="input-dupla">
-      <input type="text" id="clienteRua" placeholder="Rua">
-      <input type="text" id="clienteNumero" placeholder="Número">
-    </div>
-    <div class="input-dupla">
-      <input type="text" id="clienteBairro" placeholder="Bairro">
-    </div>
-    <button onclick="cadastrarCliente()">Cadastrar Cliente</button>
+  <div id="cadastroClientes" class="container">
+    <h2><i class="fa-solid fa-user-plus"></i> Cadastro de Clientes</h2>
+    <div class="input-group"><i class="fa-solid fa-user"></i><input type="text" id="clienteNome" placeholder="Nome"></div>
+    <div class="input-group"><i class="fa-solid fa-user"></i><input type="text" id="clienteSobrenome" placeholder="Sobrenome"></div>
+    <div class="input-group"><i class="fa-solid fa-phone"></i><input type="text" id="clienteTelefone" placeholder="Telefone"></div>
+    <div class="input-group"><i class="fa-solid fa-id-card"></i><input type="text" id="clienteCPF" placeholder="000.000.000-00" maxlength="14" oninput="formatarCPF(this)"></div>
+    <div class="input-group"><i class="fa-solid fa-dollar-sign"></i><input type="number" id="clienteLimite" placeholder="Limite de Crédito"></div>
+    <div class="input-group"><i class="fa-solid fa-city"></i><input type="text" id="clienteCidade" placeholder="Cidade"></div>
+    <div class="input-group"><i class="fa-solid fa-road"></i><input type="text" id="clienteRua" placeholder="Rua"></div>
+    <div class="input-group"><i class="fa-solid fa-hashtag"></i><input type="text" id="clienteNumero" placeholder="Número"></div>
+    <div class="input-group"><i class="fa-solid fa-location-dot"></i><input type="text" id="clienteBairro" placeholder="Bairro"></div>
+    <button onclick="cadastrarCliente()"><i class="fa-solid fa-check"></i> Cadastrar Cliente</button>
   </div>
 
   <!-- Consulta de Clientes -->
-<div id="consultaClientes" class="container" style="display: none;">
-  <h2>Consulta de Clientes</h2>
-  <input type="text" id="pesquisaCliente" placeholder="Pesquisar por nome ou CPF..." oninput="consultarClientes()">
-  <div class="list" id="listaConsultaClientes"></div>
-</div>
+  <div id="consultaClientes" class="container">
+    <h2><i class="fa-solid fa-magnifying-glass"></i> Consulta de Clientes</h2>
+    <div class="input-group"><i class="fa-solid fa-search"></i><input type="text" id="pesquisaCliente" placeholder="Pesquisar por nome ou CPF..." oninput="consultarClientes()"></div>
+    <div class="list" id="listaConsultaClientes"></div>
+  </div>
 
+  <!-- Cadastro de Produtos -->
+  <div id="cadastroProdutos" class="container">
+    <h2><i class="fa-solid fa-box-open"></i> Cadastro de Produtos</h2>
+    <div class="input-group"><i class="fa-solid fa-tag"></i><input type="text" id="produtoNome" placeholder="Nome do Produto"></div>
+    <div class="input-group"><i class="fa-solid fa-industry"></i><input type="text" id="produtoMarca" placeholder="Marca"></div>
+    <div class="input-group"><i class="fa-solid fa-money-bill-wave"></i><input type="number" id="produtoPrecoCusto" placeholder="Preço de Custo" step="0.01" min="0"></div>
+    <div class="input-group"><i class="fa-solid fa-percent"></i><input type="number" id="produtoMargemLucro" placeholder="Margem de Lucro (%)" step="0.1" min="0"></div>
+    <div class="input-group">
+      <i class="fa-solid fa-list"></i>
+      <select id="produtoCategoria">
+        <option value="" disabled selected>Selecione a Categoria</option>
+        <option value="Pesca">Pesca</option>
+        <option value="Ferramenta">Ferramenta</option>
+        <option value="Jardinagem">Jardinagem</option>
+        <option value="Petshop">Petshop</option>
+        <option value="Outros">Outros</option>
+      </select>
+    </div>
+    <div class="input-group"><i class="fa-solid fa-barcode"></i><input type="text" id="produtoCodigoExterno" placeholder="Código Externo"></div>
+    <div class="input-group"><i class="fa-solid fa-align-left"></i><textarea id="produtoDescricao" placeholder="Descrição" rows="3"></textarea></div>
+    <button onclick="cadastrarProduto()"><i class="fa-solid fa-check"></i> Cadastrar Produto</button>
+    <div class="list" id="listaProdutos"></div>
+  </div>
 
- <!-- Cadastro de Produtos -->
-<div id="cadastroProdutos" class="container" style="display: none;">
-  <h2>Cadastro de Produtos</h2>
-  
-  <input type="text" id="produtoNome" placeholder="Nome do Produto">
-<input type="text" id="produtoMarca" placeholder="Marca">
-<input type="number" id="produtoPrecoCusto" placeholder="Preço de Custo" step="0.01" min="0">
-<input type="number" id="produtoMargemLucro" placeholder="Margem de Lucro (%)" step="0.1" min="0">
-<select id="produtoCategoria">
-  <option value="" disabled selected>Selecione a Categoria</option>
-  <option value="Pesca">Pesca</option>
-  <option value="Ferramenta">Ferra</option>
-  <option value="Jardinagem">Jardinagem</option>
-  <option value="Petshop">Petshop</option>
-  <option value="Outros">Outros</option>
-</select>
-<input type="text" id="produtoCodigoExterno" placeholder="Código Externo">
-<textarea id="produtoDescricao" placeholder="Descrição" rows="3"></textarea>
-
-
-  <button onclick="cadastrarProduto()">Cadastrar Produto</button>
-  
-  <div class="list" id="listaProdutos"></div>
-</div>
-
-<div id="consultaProdutos" class="container" style="display: none;">
-  <h2>Consulta de Produtos</h2>
-  <input type="text" id="pesquisaProduto" placeholder="Pesquisar por nome, marca ou código..." oninput="consultarProdutos()">
-  <div class="list" id="listaConsultaProdutos"></div>
-</div>
-
-
+  <!-- Consulta de Produtos -->
+  <div id="consultaProdutos" class="container">
+    <h2><i class="fa-solid fa-boxes-stacked"></i> Consulta de Produtos</h2>
+    <div class="input-group"><i class="fa-solid fa-search"></i><input type="text" id="pesquisaProduto" placeholder="Pesquisar por nome, marca ou código..." oninput="consultarProdutos()"></div>
+    <div class="list" id="listaConsultaProdutos"></div>
+  </div>
 
   <!-- Quem Somos -->
-  <div id="quemsomos" class="container" style="display: none;">
-    <h2>Quem Somos</h2>
+  <div id="quemsomos" class="container">
+    <h2><i class="fa-solid fa-users"></i> Quem Somos</h2>
     <p>A Agro Vale é uma empresa dedicada ao fornecimento de insumos e produtos agropecuários...</p>
   </div>
+
+  <!-- Importa o arquivo produtos.js -->
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    consultarProdutos();
+
+    const pesquisaInput = document.getElementById("pesquisaProduto");
+    if (pesquisaInput) {
+      pesquisaInput.addEventListener("input", () => {
+        consultarProdutos();
+      });
+    }
+  });
+</script>
+
 
   <!-- Firebase e Lógica -->
   <script type="module">
@@ -442,6 +445,8 @@ window.consultarProdutos = async function () {
   }
 };
 
+window.excluirProduto = excluirProduto;
+    window.editarProduto = editarProduto;
 
 </script>
 

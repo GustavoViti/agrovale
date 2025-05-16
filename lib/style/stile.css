@@ -1,63 +1,149 @@
+/* === Animações === */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes glow {
+  0% { box-shadow: 0 0 5px #28a745; }
+  50% { box-shadow: 0 0 15px #28a745; }
+  100% { box-shadow: 0 0 5px #28a745; }
+}
+
+/* === Estilos Globais === */
 body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f4f4f4;
-      text-align: center;
-      background: url("img/stihl.png"), #000;
-    }
-    .navbar {
-      background-color: #f68221;
-      padding: 10px;
-    }
-    .navbar a {
-      color: white;
-      text-decoration: none;
-      margin: 15px;
-      font-size: 18px;
-      transition: 0.3s;
-    }
-    .navbar a:hover {
-      text-decoration: solid;
-      color: #0f9600;
-      opacity: 1;
-      font-weight: bold;
-    }
-    .container {
-      width: 50%;
-      margin: auto;
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-      display: none;
-      margin-top: 20px;
-    }
-    .container:first-of-type {
-      display: block;
-    }
-    button {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border: none;
-      border-radius: 5px;
-      background-color: #28a745;
-      color: white;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #218838;
-    }
-    .list {
-      text-align: left;
-      margin-top: 20px;
-    }
-    .input-dupla {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-    .input-dupla input {
-      width: 100%;
-    }
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url("img/stihl.png") center/cover no-repeat fixed;
+  color: #333;
+  text-align: center;
+}
+
+/* === Navbar === */
+.navbar {
+  background-color: #f68221;
+  padding: 12px 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  animation: slideInLeft 0.7s ease;
+}
+
+.navbar a {
+  color: white;
+  text-decoration: none;
+  margin: 0 20px;
+  font-size: 18px;
+  transition: all 0.3s ease;
+}
+
+.navbar a:hover {
+  color: #0f9600;
+  font-weight: bold;
+  transform: scale(1.05);
+}
+
+/* === Container === */
+.container {
+  width: 90%;
+  max-width: 600px;
+  margin: 30px auto;
+  background: #fff;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  display: none;
+  opacity: 0;
+  animation: fadeIn 0.6s forwards;
+}
+
+.container:first-of-type {
+  display: block;
+}
+
+/* === Botões === */
+button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  border: none;
+  border-radius: 6px;
+  background-color: #28a745;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background-color: #218838;
+  animation: glow 1s infinite alternate;
+}
+
+button:active {
+  transform: scale(0.98);
+  background-color: #1e7e34;
+}
+
+/* === Campos com Ícones === */
+.input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 8px 10px;
+  background-color: #f9f9f9;
+  transition: box-shadow 0.3s ease, transform 0.2s ease;
+}
+
+.input-group:focus-within {
+  box-shadow: 0 0 5px rgba(40, 167, 69, 0.3);
+  border-color: #28a745;
+  transform: scale(1.02);
+}
+
+.input-group i {
+  margin-right: 10px;
+  color: #666;
+  font-size: 18px;
+  min-width: 20px;
+  text-align: center;
+}
+
+.input-group input,
+.input-group select,
+.input-group textarea {
+  border: none;
+  outline: none;
+  width: 100%;
+  padding: 10px 5px;
+  font-size: 15px;
+  background-color: transparent;
+}
+
+/* === Lista (ex: resultados de consulta) === */
+.list {
+  text-align: left;
+  margin-top: 20px;
+  animation: fadeIn 0.5s ease;
+}
+
+select {
+  padding: 8px;
+  border-radius: 5px;
+}
