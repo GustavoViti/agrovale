@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Agrovale</title>
+  <link rel="stylesheet" href="style/tipo.css">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  
+  <div class="mensagem">
+    <h1>Bem-vindo! Você é funcionário ou cliente?</h1>
+  </div>
+
+  <div class="container">
+    <a href="login.html" class="wrapper cliente">
+      <h2>CLIENTE</h2>
+      <img src="style/img/pescador.png" alt="Imagem de um pescador feliz" class="pessoas">
+    </a>
+
+    <a href="index.html" id="login-funcionario" class="wrapper funcionario" aria-label="Entrar como funcionário">
+  <h2>FUNCIONÁRIO</h2>
+  <img src="style/img/funcionario.png" alt="Imagem de um funcionário">
+</a>
+
+  </div>
+
+<script>
+  document.getElementById('login-funcionario').addEventListener('click', function(event) {
+    event.preventDefault(); // Impede o redirecionamento imediato
+
+    const usuario = prompt("Usuário:");
+    const senha = prompt("Senha:");
+
+    if (usuario === "admin" && senha === "admin") {
+      window.location.href = "admin.html";
+    } else {
+      alert("Usuário ou senha incorretos.");
+    }
+  });
+</script>
+
+
+</body>
+</html>

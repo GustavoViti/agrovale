@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Agrovale</title>
+  <link rel="stylesheet" href="style/stile.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+  <!-- Barra de navegação -->
+  <div class="navbar">
+    <a href="#"><img src="style/img/logo.png" alt="Logo Agrovale" style="height: 40px;"></a>
+    <a href="#" onclick="mostrarSecao('home')"><i class="fa-solid fa-house"></i> Início</a>
+    <a href="#" onclick="mostrarSecao('consultaClientes')"><i class="fa-solid fa-magnifying-glass"></i> Consulta de Clientes</a>
+    <a href="#" onclick="mostrarSecao('cadastroProdutos')"><i class="fa-solid fa-box"></i> Cadastro de Produtos</a>
+    <a href="#" onclick="mostrarSecao('consultaProdutos')"><i class="fa-solid fa-search"></i> Consulta de Produtos</a>
+  </div>
+
+  <!-- Seção Home -->
+  <div id="home" class="container">
+    <h2>Bem-vindo à Agro Vale</h2>
+    <p>Selecione uma opção no menu para começar.</p>
+  </div>
+
+  <!-- Consulta de Clientes -->
+  <div id="consultaClientes" class="container">
+    <h2><i class="fa-solid fa-magnifying-glass"></i> Consulta de Clientes</h2>
+    <div class="input-group"><i class="fa-solid fa-search"></i><input type="text" id="pesquisaCliente" placeholder="Pesquisar por nome ou CPF..." oninput="consultarClientes()"></div>
+    <div class="list" id="listaConsultaClientes"></div>
+  </div>
+
+  <!-- Cadastro de Produtos -->
+  <div id="cadastroProdutos" class="container">
+    <h2><i class="fa-solid fa-box-open"></i> Cadastro de Produtos</h2>
+    <div class="input-group"><i class="fa-solid fa-tag"></i><input type="text" id="produtoNome" placeholder="Nome do Produto"></div>
+    <div class="input-group"><i class="fa-solid fa-industry"></i><input type="text" id="produtoMarca" placeholder="Marca"></div>
+    <div class="input-group"><i class="fa-solid fa-money-bill-wave"></i><input type="number" id="produtoPrecoCusto" placeholder="Preço de Custo" step="0.01" min="0"></div>
+    <div class="input-group"><i class="fa-solid fa-percent"></i><input type="number" id="produtoMargemLucro" placeholder="Margem de Lucro (%)" step="0.1" min="0"></div>
+    <div class="input-group">
+      <i class="fa-solid fa-list"></i>
+      <select id="produtoCategoria">
+        <option value="" disabled selected>Selecione a Categoria</option>
+        <option value="Pesca">Pesca</option>
+        <option value="Ferramenta">Ferramenta</option>
+        <option value="Jardinagem">Jardinagem</option>
+        <option value="Petshop">Petshop</option>
+        <option value="Outros">Outros</option>
+      </select>
+    </div>
+    <div class="input-group"><i class="fa-solid fa-barcode"></i><input type="text" id="produtoCodigoExterno" placeholder="Código Externo"></div>
+    <div class="input-group"><i class="fa-solid fa-align-left"></i><textarea id="produtoDescricao" placeholder="Descrição" rows="3"></textarea></div>
+    <button onclick="cadastrarProduto()"><i class="fa-solid fa-check"></i> Cadastrar Produto</button>
+    <div class="list" id="listaProdutos"></div>
+  </div>
+
+  <!-- Consulta de Produtos -->
+  <div id="consultaProdutos" class="container">
+    <h2><i class="fa-solid fa-boxes-stacked"></i> Consulta de Produtos</h2>
+    <div class="input-group"><i class="fa-solid fa-search"></i><input type="text" id="pesquisaProduto" placeholder="Pesquisar por nome, marca ou código..." oninput="consultarProdutos()"></div>
+    <div class="list" id="listaConsultaProdutos"></div>
+  </div>
+
+  <!-- Importa o arquivo produtos.js -->
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    consultarProdutos();
+
+    const pesquisaInput = document.getElementById("pesquisaProduto");
+    if (pesquisaInput) {
+      pesquisaInput.addEventListener("input", () => {
+        consultarProdutos();
+      });
+    }
+  });
+</script>
+
+
+  <!-- Firebase e Lógica -->
+  <script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+  import {
+    getFirestore, collection, addDoc, getDocs,
+    query, orderBy, doc, updateDoc, deleteDoc
+  } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyDa5dqtuV2sTVh07NZafHVlYBO0EtvryUM",
+    authDomain: "agrovale-c4ce6.firebaseapp.com",
+    projectId: "agrovale-c4ce6",
+    storageBucket: "agrovale-c4ce6.firebasestorage.app",
+    messagingSenderId: "292420787522",
+    appId: "1:292420787522:web:6bee092a1fcd877a257cdb",
+    measurementId: "G-K4E7781SQ6"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  let clienteEmEdicaoId = null;
+
+  window.mostrarSecao = function(secao) {
+    document.querySelectorAll('.container').forEach(s => s.style.display = 'none');
+    document.getElementById(secao).style.display = 'block';
+
+    if (secao === "consultaClientes") {
+  consultarClientes();
+} else if (secao === "consultaProdutos") {
+  consultarProdutos();
+}
+
+  };
+
+  window.consultarClientes = async function () {
+    const lista = document.getElementById("listaConsultaClientes");
+    const termo = document.getElementById("pesquisaCliente").value.toLowerCase();
+    lista.innerHTML = "<p>Carregando...</p>";
+
+    try {
+      const q = query(collection(db, "clientes"), orderBy("nome"));
+      const querySnapshot = await getDocs(q);
+
+      if (querySnapshot.empty) {
+        lista.innerHTML = "<p>Nenhum cliente encontrado.</p>";
+        return;
+      }
+
+      let html = "";
+      querySnapshot.forEach((docSnap) => {
+        const c = docSnap.data();
+        const id = docSnap.id;
+
+        const nomeCompleto = `${c.nome} ${c.sobrenome}`.toLowerCase();
+        const cpf = c.cpf.toLowerCase();
+
+        if (termo && !nomeCompleto.includes(termo) && !cpf.includes(termo)) {
+          return;
+        }
+
+        html += `
+          <div class="cliente" style="margin-bottom: 15px;">
+            <p onclick="toggleDetalhes('${id}')" style="cursor: pointer; font-weight: bold;">${c.nome} ${c.sobrenome}</p>
+            <div id="detalhes-${id}" style="display: none; padding-left: 10px;">
+              <p>Telefone: ${c.telefone}</p>
+              <p>CPF: ${c.cpf}</p>
+              <p>Limite: R$ ${c.limite.toFixed(2)}</p>
+              <p>Endereço: ${c.endereco.rua}, ${c.endereco.numero} - ${c.endereco.bairro}, ${c.endereco.cidade}</p>
+              <button onclick="editarCliente('${id}', '${c.nome}', '${c.sobrenome}', '${c.telefone}', '${c.cpf}', ${c.limite}, '${c.endereco.cidade}', '${c.endereco.rua}', '${c.endereco.numero}', '${c.endereco.bairro}')">Editar</button>
+              <button onclick="excluirCliente('${id}')">Excluir</button>
+            </div>
+            <hr>
+          </div>
+        `;
+      });
+
+      lista.innerHTML = html || "<p>Nenhum cliente encontrado.</p>";
+
+    } catch (error) {
+      console.error("Erro ao consultar clientes:", error);
+      lista.innerHTML = "<p>Erro ao carregar clientes.</p>";
+    }
+  };
+
+  window.editarCliente = function (id, nome, sobrenome, telefone, cpf, limite, cidade, rua, numero, bairro) {
+    clienteEmEdicaoId = id;
+    mostrarSecao("cadastroClientes");
+
+    document.getElementById("clienteNome").value = nome;
+    document.getElementById("clienteSobrenome").value = sobrenome;
+    document.getElementById("clienteTelefone").value = telefone;
+    document.getElementById("clienteCPF").value = cpf;
+    document.getElementById("clienteLimite").value = limite;
+    document.getElementById("clienteCidade").value = cidade;
+    document.getElementById("clienteRua").value = rua;
+    document.getElementById("clienteNumero").value = numero;
+    document.getElementById("clienteBairro").value = bairro;
+
+    alert("Agora você pode editar o cliente. Ao clicar em 'Cadastrar Cliente', os dados serão atualizados.");
+  };
+
+  window.excluirCliente = async function (id) {
+    if (confirm("Tem certeza que deseja excluir este cliente?")) {
+      try {
+        await deleteDoc(doc(db, "clientes", id));
+        alert("Cliente excluído com sucesso!");
+        consultarClientes();
+      } catch (error) {
+        console.error("Erro ao excluir cliente:", error);
+        alert("Erro ao excluir cliente.");
+      }
+    }
+  };
+
+  window.toggleDetalhes = function (id) {
+    const div = document.getElementById(`detalhes-${id}`);
+    div.style.display = div.style.display === "none" ? "block" : "none";
+  };
+
+  window.toggleDetalhesProduto = function (id) {
+  const div = document.getElementById(`detalhes-produto-${id}`);
+  div.style.display = div.style.display === "none" ? "block" : "none";
+};
+
+  window.cadastrarProduto = async function() {
+  const nome = document.getElementById("produtoNome").value.trim();
+  const marca = document.getElementById("produtoMarca").value.trim();
+  const precoCusto = parseFloat(document.getElementById("produtoPrecoCusto").value);
+  const margemLucro = parseFloat(document.getElementById("produtoMargemLucro").value);
+  const categoria = document.getElementById("produtoCategoria").value;
+  const codigoExterno = document.getElementById("produtoCodigoExterno").value.trim();
+  const descricao = document.getElementById("produtoDescricao").value.trim();
+
+  if (!nome || !marca || isNaN(precoCusto) || isNaN(margemLucro) || !categoria || !codigoExterno) {
+    alert("Preencha todos os campos obrigatórios.");
+    return;
+  }
+
+  const precoVenda = precoCusto + (precoCusto * margemLucro / 100);
+
+  const produto = {
+    nome,
+    marca,
+    preco_custo: precoCusto,
+    margem_lucro: margemLucro,
+    preco_venda: precoVenda,
+    categoria,
+    codigo_externo: codigoExterno,
+    descricao
+  };
+
+  try {
+    const resposta = await fetch("http://localhost:3000/api/produtos", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(produto)
+    });
+
+    if (resposta.ok) {
+      alert("Produto cadastrado com sucesso!");
+
+      // Limpa os campos
+      document.getElementById("produtoNome").value = "";
+      document.getElementById("produtoMarca").value = "";
+      document.getElementById("produtoPrecoCusto").value = "";
+      document.getElementById("produtoMargemLucro").value = "";
+      document.getElementById("produtoCategoria").selectedIndex = 0;
+      document.getElementById("produtoCodigoExterno").value = "";
+      document.getElementById("produtoDescricao").value = "";
+
+    } else {
+      const erro = await resposta.text();
+      alert("Erro ao cadastrar produto: " + erro);
+    }
+  } catch (erro) {
+    console.error("Erro na requisição:", erro);
+    alert("Erro ao conectar com o servidor.");
+  }
+};
+
+window.consultarProdutos = async function () {
+  const lista = document.getElementById("listaConsultaProdutos");
+  const termo = document.getElementById("pesquisaProduto").value.toLowerCase();
+  lista.innerHTML = "<p>Carregando...</p>";
+
+  try {
+    const resposta = await fetch("http://localhost:3000/api/produtos");
+    if (!resposta.ok) {
+      throw new Error("Erro ao buscar produtos");
+    }
+
+    const produtos = await resposta.json();
+
+    if (produtos.length === 0) {
+      lista.innerHTML = "<p>Nenhum produto encontrado.</p>";
+      return;
+    }
+
+    let html = "";
+    produtos.forEach(p => {
+      const nome = p.nome.toLowerCase();
+      const marca = p.marca.toLowerCase();
+      const codigo = p.codigo_externo.toLowerCase();
+
+      if (termo && !nome.includes(termo) && !marca.includes(termo) && !codigo.includes(termo)) {
+        return;
+      }
+
+      html += `
+        <div class="produto" style="margin-bottom: 15px;">
+          <p onclick="toggleDetalhesProduto('${p.id}')" style="cursor: pointer; font-weight: bold;">${p.nome} (${p.marca})</p>
+          <div id="detalhes-produto-${p.id}" style="display: none; padding-left: 10px;">
+            <p>Categoria: ${p.categoria}</p>
+            <p>Preço de Custo: R$ ${parseFloat(p.preco_custo).toFixed(2)}</p>
+            <p>Margem de Lucro: ${p.margem_lucro}%</p>
+            <p>Preço de Venda: R$ ${parseFloat(p.preco_venda).toFixed(2)}</p>
+            <p>Código Externo: ${p.codigo_externo}</p>
+            <p>Descrição: ${p.descricao || "N/A"}</p>
+          </div>
+          <hr>
+        </div>
+      `;
+    });
+
+    lista.innerHTML = html || "<p>Nenhum produto corresponde à pesquisa.</p>";
+
+  } catch (erro) {
+    console.error("Erro ao consultar produtos:", erro);
+    lista.innerHTML = "<p>Erro ao carregar produtos.</p>";
+  }
+};
+
+window.excluirProduto = excluirProduto;
+    window.editarProduto = editarProduto;
+
+  const auth = getAuth(app);
+
+</script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cadastro Complementar</title>
+  <link rel="stylesheet" href="style/cadastro.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+</head>
+<body>
+  <h2>Cadastro Complementar</h2>
+
+  <div id="mensagem" style="margin-bottom: 15px; color: red;"></div>
+
+  <div class="wrapper">
+    <form id="formCadastroComplementar" class="container">
+      <h2><i class="fa-solid fa-user"></i> Cadastro Complementar</h2>
+
+      <div class="input-group">
+        <i class="fa-solid fa-id-card"></i>
+        <input type="text" id="nome" placeholder="Nome Completo" required />
+      </div>
+
+      <div class="input-group">
+        <i class="fa-solid fa-file-invoice"></i>
+        <input type="text" id="cpf" placeholder="CPF" required />
+      </div>
+
+      <div class="input-group">
+        <i class="fa-solid fa-phone"></i>
+        <input type="tel" id="telefone" placeholder="Telefone" required />
+      </div>
+
+      <div class="input-group">
+        <i class="fa-solid fa-map-pin"></i>
+        <input type="text" id="cep" placeholder="CEP" required />
+      </div>
+
+      <div class="input-group">
+        <i class="fa-solid fa-road"></i>
+        <input type="text" id="rua" placeholder="Rua" required />
+      </div>
+
+      <div class="input-group">
+        <i class="fa-solid fa-hashtag"></i>
+        <input type="text" id="numero" placeholder="Número" required />
+      </div>
+
+      <div class="input-group">
+        <i class="fa-solid fa-building"></i>
+        <input type="text" id="complemento" placeholder="Complemento" />
+      </div>
+
+      <div class="input-group">
+        <i class="fa-solid fa-city"></i>
+        <input type="text" id="cidade" placeholder="Cidade" required />
+      </div>
+
+      <div class="input-group">
+        <i class="fa-solid fa-flag-usa"></i>
+        <input type="text" id="estado" placeholder="Estado" required />
+      </div>
+
+      <button type="submit"><i class="fa-solid fa-check"></i> Salvar</button>
+    </form>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    import { getAuth } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+    // Configuração do Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyDa5dqtuV2sTVh07NZafHVlYBO0EtvryUM",
+      authDomain: "agrovale-c4ce6.firebaseapp.com",
+      projectId: "agrovale-c4ce6",
+      storageBucket: "agrovale-c4ce6.appspot.com",
+      messagingSenderId: "292420787522",
+      appId: "1:292420787522:web:6bee092a1fcd877a257cdb",
+      measurementId: "G-K4E7781SQ6"
+    };
+
+    // Inicializa o Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    // Validação de CPF
+    function validarCPF(cpf) {
+      cpf = cpf.replace(/\D/g, '');
+      if (cpf.length !== 11 || /^(\d)\1{10}$/.test(cpf)) {
+        return false;
+      }
+      let soma = 0;
+      let resto;
+
+      for (let i = 1; i <= 9; i++) {
+        soma += parseInt(cpf.charAt(i - 1)) * (11 - i);
+      }
+      resto = (soma * 10) % 11;
+      if (resto === 10 || resto === 11) resto = 0;
+      if (resto !== parseInt(cpf.charAt(9))) return false;
+
+      soma = 0;
+      for (let i = 1; i <= 10; i++) {
+        soma += parseInt(cpf.charAt(i - 1)) * (12 - i);
+      }
+      resto = (soma * 10) % 11;
+      if (resto === 10 || resto === 11) resto = 0;
+
+      return resto === parseInt(cpf.charAt(10));
+    }
+
+    // Consulta ViaCEP para preencher endereço
+    document.getElementById("cep").addEventListener("blur", () => {
+      const cep = document.getElementById("cep").value.replace(/\D/g, '');
+      if (cep.length !== 8) return;
+
+      fetch(`https://viacep.com.br/ws/${cep}/json/`)
+        .then(response => response.json())
+        .then(data => {
+          if ("erro" in data) {
+            document.getElementById("mensagem").textContent = "CEP não encontrado.";
+            return;
+          }
+          document.getElementById("rua").value = data.logradouro || "";
+          document.getElementById("cidade").value = data.localidade || "";
+          document.getElementById("estado").value = data.uf || "";
+          document.getElementById("mensagem").textContent = "";
+        })
+        .catch(() => {
+          document.getElementById("mensagem").textContent = "Erro ao buscar o CEP.";
+        });
+    });
+
+    // Salvar dados no Firestore e redirecionar para home.html
+    document.getElementById("formCadastroComplementar").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const cpfInput = document.getElementById("cpf").value;
+      const mensagem = document.getElementById("mensagem");
+
+      if (!validarCPF(cpfInput)) {
+        mensagem.textContent = "CPF inválido. Verifique e tente novamente.";
+        mensagem.style.color = "red";
+        return;
+      }
+
+      mensagem.textContent = "";
+
+      const user = auth.currentUser;
+      if (!user) {
+        alert("Usuário não está logado.");
+        return;
+      }
+
+      // Coleta dos dados do formulário
+      const nome = document.getElementById("nome").value.trim();
+      const cpf = cpfInput.trim();
+      const telefone = document.getElementById("telefone").value.trim();
+      const cep = document.getElementById("cep").value.trim();
+      const rua = document.getElementById("rua").value.trim();
+      const numero = document.getElementById("numero").value.trim();
+      const complemento = document.getElementById("complemento").value.trim();
+      const cidade = document.getElementById("cidade").value.trim();
+      const estado = document.getElementById("estado").value.trim();
+
+      if (!nome || !cpf || !telefone || !cep || !rua || !numero || !cidade || !estado) {
+        mensagem.textContent = "Por favor, preencha todos os campos obrigatórios.";
+        mensagem.style.color = "red";
+        return;
+      }
+
+      try {
+        await setDoc(doc(db, "usuariosComplementar", user.uid), {
+          nome,
+          cpf,
+          telefone,
+          endereco: {
+            cep,
+            rua,
+            numero,
+            complemento,
+            cidade,
+            estado,
+          },
+          atualizadoEm: new Date()
+        });
+
+        alert("Cadastro complementar salvo com sucesso!");
+        window.location.href = "home.html";
+      } catch (error) {
+        console.error("Erro ao salvar cadastro complementar:", error);
+        mensagem.textContent = "Erro ao salvar dados. Tente novamente.";
+        mensagem.style.color = "red";
+      }
+    });
+  </script>
+</body>
+</html>

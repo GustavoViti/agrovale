@@ -54,7 +54,7 @@
           console.log("Usuário cadastrado:", userCredential.user);
           alert("Cadastro realizado com sucesso!");
           sessionStorage.setItem("usuarioLogado", true);
-          window.location.href = "index.html";
+          window.location.href = "complemento.html";
         })
         .catch((error) => {
           alert("Erro ao cadastrar: " + error.message);

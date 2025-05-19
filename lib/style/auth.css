@@ -36,9 +36,8 @@ body::before {
   -webkit-backdrop-filter: blur(8px); /* Suporte ao Safari – Gustavo Viti */
 }
 
-form {
-  display: flex; /* Flexbox para empilhar elementos verticalmente – Gustavo Viti */
-  flex-direction: column; /* Direção em coluna – Gustavo Viti */
+.wrapper:hover{
+  transform: scale(1.2);
 }
 
 h2 {
