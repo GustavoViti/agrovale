@@ -1,148 +1,53 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
   <title>Agrovale</title>
-  <link rel="stylesheet" href="style/home.css" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="style/home.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css">
 </head>
-<body onload="verificarLogin()">
-  <nav>
-    <!-- Botão para abrir o carrinho -->
-<button id="btnCarrinho" style="position: fixed; top: 20px; right: 20px; z-index: 1000; background: #28a745; color: white; border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 20px; cursor: pointer;">
-  🛒
-  <span id="contadorCarrinho" style="position: absolute; top: 5px; right: 5px; background: red; color: white; border-radius: 50%; width: 18px; height: 18px; font-size: 12px; display: flex; align-items: center; justify-content: center;">0</span>
-</button>
-
-<!-- Modal do Carrinho -->
-<div id="modalCarrinho" class="modal hidden" style="position: fixed; top: 60px; right: 20px; width: 350px; max-height: 70vh; overflow-y: auto; background: rgba(0,0,0,0.9); border-radius: 10px; padding: 15px; color: white; z-index: 1001;">
-  <h2>Carrinho</h2>
-  <div id="itensCarrinho"></div>
-  <button id="fecharCarrinho" style="margin-top: 10px; padding: 10px; background: #28a745; border: none; border-radius: 6px; cursor: pointer;">Fechar</button>
-</div>
-  </nav>
-  <h1>Produtos</h1>
-  <div id="produtos-container"></div>
-
-  <!-- Modal de visualização -->
-  <div id="modal" class="modal hidden">
-    <div class="modal-content">
-      <span class="close" id="closeModal">&times;</span>
-      <img id="modalImagem" src="" alt="Produto" />
-      <h2 id="modalNome"></h2>
-      <p id="modalDescricao"></p>
-      <p><strong>Marca:</strong> <span id="modalMarca"></span></p>
-      <p><strong>Categoria:</strong> <span id="modalCategoria"></span></p>
-      <p><strong>Preço:</strong> R$ <span id="modalPreco"></span></p>
-      <button id="adicionarCarrinho">Adicionar ao Carrinho</button>
+<body>
+  <header class="navbar">
+    <div class="logo"><img src="style/img/logo.png" alt=""></div>
+    <div class="search-bar">
+      <input type="text" placeholder="Buscar produto...">
+      <i class="bx bx-search"></i>
     </div>
-  </div>
+    <div class="icons">
+      <i class="bx bx-user"></i>
+      <i class="bx bx-cart"></i>
+    </div>
+  </header>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-    import {
-      getFirestore
-    } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+  <main>
+    <section class="categoria">
+      <h2>Pesca</h2>
+      <div class="carrossel" id="pesca"></div>
+    </section>
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyDa5dqtuV2sTVh07NZafHVlYBO0EtvryUM",
-      authDomain: "agrovale-c4ce6.firebaseapp.com",
-      projectId: "agrovale-c4ce6",
-      storageBucket: "agrovale-c4ce6.firebasestorage.app",
-      messagingSenderId: "292420787522",
-      appId: "1:292420787522:web:6bee092a1fcd877a257cdb",
-      measurementId: "G-K4E7781SQ6"
-    };
+    <section class="categoria">
+      <h2>Ferramenta</h2>
+      <div class="carrossel" id="ferramenta"></div>
+    </section>
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
+    <section class="categoria">
+      <h2>Jardinagem</h2>
+      <div class="carrossel" id="jardinagem"></div>
+    </section>
 
-    window.verificarLogin = function() {
-      const usuarioLogado = sessionStorage.getItem("usuarioLogado");
-      if (!usuarioLogado) {
-        window.location.href = "tipo.html";
-      }
-    };
+    <section class="categoria">
+      <h2>Petshop</h2>
+      <div class="carrossel" id="petshop"></div>
+    </section>
 
-    document.addEventListener('DOMContentLoaded', async () => {
-      const container = document.getElementById('produtos-container');
-      const modal = document.getElementById('modal');
-      const closeModal = document.getElementById('closeModal');
-      const modalNome = document.getElementById('modalNome');
-      const modalDescricao = document.getElementById('modalDescricao');
-      const modalPreco = document.getElementById('modalPreco');
-      const modalImagem = document.getElementById('modalImagem');
-      const modalMarca = document.getElementById('modalMarca');
-      const modalCategoria = document.getElementById('modalCategoria');
-      const addButton = document.getElementById('adicionarCarrinho');
+    <section class="categoria">
+      <h2>Outros</h2>
+      <div class="carrossel" id="outros"></div>
+    </section>
+  </main>
 
-      let produtoSelecionado = null;
-
-      const produtos = await fetch('http://localhost:3000/api/produtos').then(res => res.json());
-
-      // Agrupar produtos por categoria
-      const produtosPorCategoria = {};
-      produtos.forEach(produto => {
-        const categoria = produto.categoria || 'Outros';
-        if (!produtosPorCategoria[categoria]) {
-          produtosPorCategoria[categoria] = [];
-        }
-        produtosPorCategoria[categoria].push(produto);
-      });
-
-      // Criar seções para cada categoria com título e linha de cards com scroll horizontal
-      Object.keys(produtosPorCategoria).forEach(categoria => {
-        const secao = document.createElement('div');
-        secao.className = 'categoria-bloco';
-
-        // Título com a classe para estilo
-        const titulo = document.createElement('h2');
-        titulo.textContent = categoria;
-        titulo.className = 'categoria-titulo';
-        secao.appendChild(titulo);
-
-        // Container com scroll horizontal e cards dentro
-        const linha = document.createElement('div');
-        linha.className = 'categoria-container'; // classe para scroll horizontal
-
-        produtosPorCategoria[categoria].forEach(produto => {
-          const card = document.createElement('div');
-          card.className = 'card';
-          card.innerHTML = `
-            <img src="https://via.placeholder.com/150?text=${encodeURIComponent(produto.nome)}" alt="${produto.nome}">
-            <h3>${produto.nome}</h3>
-            <p>R$ ${parseFloat(produto.preco_venda).toFixed(2)}</p>
-          `;
-
-          card.addEventListener('click', () => {
-            produtoSelecionado = produto;
-            modalImagem.src = `https://via.placeholder.com/300?text=${encodeURIComponent(produto.nome)}`;
-            modalNome.textContent = produto.nome;
-            modalDescricao.textContent = produto.descricao;
-            modalPreco.textContent = parseFloat(produto.preco_venda).toFixed(2);
-            modalMarca.textContent = produto.marca;
-            modalCategoria.textContent = produto.categoria;
-            modal.classList.remove('hidden');
-          });
-
-          linha.appendChild(card);
-        });
-
-        secao.appendChild(linha);
-        container.appendChild(secao);
-      });
-
-      closeModal.addEventListener('click', () => modal.classList.add('hidden'));
-
-      addButton.addEventListener('click', () => {
-        let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
-        carrinho.push(produtoSelecionado);
-        localStorage.setItem('carrinho', JSON.stringify(carrinho));
-        alert('Produto adicionado ao carrinho!');
-        modal.classList.add('hidden');
-      });
-    });
-  </script>
+  <script src="js/index.js"></script>
 </body>
 </html>
