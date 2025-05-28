@@ -1,23 +1,36 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Agrovale</title>
-  <link rel="stylesheet" href="style/home.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css">
+  <link rel="stylesheet" href="style/home.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+  />
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css"
+  />
 </head>
 <body>
   <header class="navbar">
-    <div class="logo"><img src="style/img/logo.png" alt=""></div>
+    <div class="logo"><img src="style/img/logo.png" alt="Logo Agrovale" /></div>
+
     <div class="search-bar">
-      <input type="text" placeholder="Buscar produto...">
+      <input type="text" placeholder="Buscar produto..." />
       <i class="bx bx-search"></i>
     </div>
+
     <div class="icons">
       <i class="bx bx-user"></i>
-      <i class="bx bx-cart"></i>
+
+      <!-- Ícone do carrinho com classe e contador -->
+      <div class="cart-icon" style="position: relative;">
+        <i class="bx bx-cart"></i>
+        <span id="cart-count">0</span>
+      </div>
     </div>
   </header>
 
@@ -47,6 +60,19 @@
       <div class="carrossel" id="outros"></div>
     </section>
   </main>
+
+  <!-- Modal do Carrinho -->
+<div id="carrinho-modal" class="carrinho-modal">
+  <div class="carrinho-header">
+    <h2>Meu Carrinho</h2>
+    <button id="fechar-carrinho">&times;</button>
+  </div>
+  <div class="carrinho-conteudo" id="carrinho-itens"></div>
+  <div class="carrinho-footer">
+    <strong>Total: R$ <span id="total-carrinho">0.00</span></strong>
+  </div>
+</div>
+
 
   <script src="js/index.js"></script>
 </body>
