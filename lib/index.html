@@ -70,31 +70,85 @@
 
   <script src="js/index.js"></script>
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-    import {
-      getFirestore
-    } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+  import {
+    getFirestore
+  } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+  import {
+    getAuth,
+    onAuthStateChanged
+  } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyDa5dqtuV2sTVh07NZafHVlYBO0EtvryUM",
-      authDomain: "agrovale-c4ce6.firebaseapp.com",
-      projectId: "agrovale-c4ce6",
-      storageBucket: "agrovale-c4ce6.firebasestorage.app",
-      messagingSenderId: "292420787522",
-      appId: "1:292420787522:web:6bee092a1fcd877a257cdb",
-      measurementId: "G-K4E7781SQ6"
+  const firebaseConfig = {
+    apiKey: "AIzaSyDa5dqtuV2sTVh07NZafHVlYBO0EtvryUM",
+    authDomain: "agrovale-c4ce6.firebaseapp.com",
+    projectId: "agrovale-c4ce6",
+    storageBucket: "agrovale-c4ce6.firbasestorage.app",
+    messagingSenderId: "292420787522",
+    appId: "1:292420787522:web:6bee092a1fcd877a257cdb",
+    measurementId: "G-K4E7781SQ6"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const auth = getAuth(app);
+
+  // Sua função original de verificação
+  window.verificarLogin = function() {
+    const usuarioLogado = sessionStorage.getItem("usuarioLogado");
+    if (!usuarioLogado) {
+      window.location.href = "tipo.html";
+    }
+  };
+
+  // Nova lógica: obter UID do usuário autenticado
+  let uidDoUsuario = null;
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      uidDoUsuario = user.uid;
+      console.log("UID do usuário logado:", uidDoUsuario);
+
+      // Agora você pode usar uidDoUsuario para enviar junto com o pedido
+      // Exemplo de como usar:
+      // enviarPedido(uidDoUsuario);
+    } else {
+      console.log("Usuário não autenticado.");
+    }
+  });
+
+  // Exemplo de função que você pode chamar no botão de "Finalizar Pedido"
+  window.enviarPedido = function() {
+    if (!uidDoUsuario) {
+      alert("Usuário não autenticado.");
+      return;
+    }
+
+    const pedido = {
+      uid: uidDoUsuario,
+      itens: [
+        { nome: "Produto A", preco: 20, quantidade: 2 }
+      ],
+      total: 40
     };
 
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    window.verificarLogin = function() {
-      const usuarioLogado = sessionStorage.getItem("usuarioLogado");
-      if (!usuarioLogado) {
-        window.location.href = "tipo.html";
-      }
-    };
+    fetch("http://localhost:3000/api/pedidos", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(pedido)
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log("Pedido criado com sucesso:", data);
+      })
+      .catch(err => {
+        console.error("Erro ao criar pedido:", err);
+      });
+  };
 </script>
+
 
 </body>
 </html>
