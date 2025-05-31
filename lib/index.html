@@ -1,34 +1,24 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Agrovale</title>
-  <link rel="stylesheet" href="style/home.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link
-    rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
-  />
-  <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css"
-  />
+  <link rel="stylesheet" href="style/home.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@2.1.4/css/boxicons.min.css">
 </head>
-<body>
+<body onload="verificarLogin()">
   <header class="navbar">
-    <div class="logo"><img src="style/img/logo.png" alt="Logo Agrovale" /></div>
-
+    <div class="logo"><img src="style/img/logo.png" alt=""></div>
     <div class="search-bar">
-      <input type="text" placeholder="Buscar produto..." />
-      <i class="bx bx-search"></i>
+      <input type="text" id="input-pesquisa" placeholder="Buscar produto...">
+      <i class="bx bx-search" id="btn-pesquisa"></i>
     </div>
-
     <div class="icons">
       <i class="bx bx-user"></i>
-
-      <!-- Ícone do carrinho com classe e contador -->
-      <div class="cart-icon" style="position: relative;">
-        <i class="bx bx-cart"></i>
+      <div class="cart-wrapper">
+        <i class="bx bx-cart" id="cart-icon"></i>
         <span id="cart-count">0</span>
       </div>
     </div>
@@ -61,19 +51,50 @@
     </section>
   </main>
 
-  <!-- Modal do Carrinho -->
-<div id="carrinho-modal" class="carrinho-modal">
-  <div class="carrinho-header">
-    <h2>Meu Carrinho</h2>
-    <button id="fechar-carrinho">&times;</button>
-  </div>
-  <div class="carrinho-conteudo" id="carrinho-itens"></div>
-  <div class="carrinho-footer">
-    <strong>Total: R$ <span id="total-carrinho">0.00</span></strong>
+  <!-- Carrinho Lateral -->
+  <div id="carrinho-modal" class="carrinho-modal">
+    <div class="carrinho-header">
+      <h2>Meu Carrinho</h2>
+      <button id="fechar-carrinho">&times;</button>
+    </div>
+    <div class="carrinho-conteudo" id="carrinho-itens"></div>
+   <div class="carrinho-footer">
+  <strong>Total: R$ <span id="total-carrinho">0.00</span></strong>
+  <div class="botoes-carrinho">
+    <button id="finalizar-pedido">Finalizar Pedido</button>
+    <button id="fechar-carrinho-rodape">Fechar Carrinho</button>
   </div>
 </div>
 
+  </div>
 
   <script src="js/index.js"></script>
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import {
+      getFirestore
+    } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyDa5dqtuV2sTVh07NZafHVlYBO0EtvryUM",
+      authDomain: "agrovale-c4ce6.firebaseapp.com",
+      projectId: "agrovale-c4ce6",
+      storageBucket: "agrovale-c4ce6.firebasestorage.app",
+      messagingSenderId: "292420787522",
+      appId: "1:292420787522:web:6bee092a1fcd877a257cdb",
+      measurementId: "G-K4E7781SQ6"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    window.verificarLogin = function() {
+      const usuarioLogado = sessionStorage.getItem("usuarioLogado");
+      if (!usuarioLogado) {
+        window.location.href = "tipo.html";
+      }
+    };
+</script>
+
 </body>
 </html>
